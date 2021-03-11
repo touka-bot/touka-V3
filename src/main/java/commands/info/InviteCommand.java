@@ -3,12 +3,10 @@ package commands.info;
 import cofig.Config;
 import core.command.Command;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 
-//TODO use invite command or change or delete it
 public class InviteCommand extends Command {
-    private static final String INVITE_LINK =
-            "(<link>)";
 
     public InviteCommand() {
         super("invite", "Get the invite link for this bot");
@@ -17,10 +15,9 @@ public class InviteCommand extends Command {
     @Override
     public void called(String args) {
 
-        EmbedBuilder builder = Config.getDefaultEmbed()
-                .setTitle("Invite Killua to your server!")
-                .addField("Invite link", "[Invite]" + INVITE_LINK, true)
-                .setFooter("This bot was made by myself");
-        reply(builder.build());
+        MessageEmbed builder = Config.getDefaultEmbed()
+                .setTitle("Invite me!")
+                .setDescription("[Click here](https://discord.com/api/oauth2/authorize?client_id=783720725848129566&permissions=8192&scope=bot)").build();
+        reply(builder);
     }
 }

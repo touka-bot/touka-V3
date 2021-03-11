@@ -28,8 +28,8 @@ public class Main {
         builder.setCompression(Compression.ZLIB);
         builder.setStatus(OnlineStatus.ONLINE);
         builder.setAutoReconnect(true);
-        //b.setToken("NzgzNzY5OTgyNjMwMzYzMTk3.X8fkrQ.LvgAphYEinHyPyQNz3mgYbPoxF0");
-        builder.setActivity(Activity.listening(">help"));
+
+        builder.setActivity(Activity.listening(Config.PREFIX + "help"));
         builder.setDisabledIntents(GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MEMBERS);
         builder.setMemberCachePolicy(MemberCachePolicy.NONE);
         builder.disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.ROLE_TAGS, CacheFlag.MEMBER_OVERRIDES, CacheFlag.EMOTE, CacheFlag.VOICE_STATE);
@@ -41,9 +41,9 @@ public class Main {
                 new ReactionEventListener()
         );
 
-        ShardManager jda = builder.build();
+        ShardManager sm = builder.build();
+        Config.setSm(sm);
         setupCommands();
-       // Config.setJda(jda.getShardById());
     }
 
     private static void setupCommands() {
