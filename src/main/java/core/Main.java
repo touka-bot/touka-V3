@@ -2,6 +2,7 @@ package core;
 
 import cofig.Config;
 import commands.info.HelpCommand;
+import commands.info.InfoCommand;
 import commands.info.InviteCommand;
 import core.command.CommandListener;
 import core.reactions.ReactionEventListener;
@@ -24,7 +25,7 @@ public class Main {
 
     public static void main(String[] args) throws LoginException {
         DefaultShardManagerBuilder builder =
-                DefaultShardManagerBuilder.createDefault("NzgzNzIwNzI1ODQ4MTI5NTY2.X8e2zQ.nbq7lDRxEK9eNebvwY6yfV6qLGk");
+                DefaultShardManagerBuilder.createDefault("ODE5MjM3MTU0OTc3ODczOTMw.YEjsDg.n20cgALF7DBbrp1-0RnA3Kg_8ok");
         builder.setCompression(Compression.ZLIB);
         builder.setStatus(OnlineStatus.ONLINE);
         builder.setAutoReconnect(true);
@@ -49,5 +50,6 @@ public class Main {
     private static void setupCommands() {
         new HelpCommand();
         new InviteCommand();
+        new InfoCommand();
     }
 }

@@ -12,6 +12,7 @@ public class Config {
     public static final String PREFIX = "<";
     public static final Color DEFAULT_COLOR = new Color(255, 255, 255);
     public static final long THIS_ID = 819237154977873930L;
+    public static final String VERSION = "3.0.0";
     private static ShardManager sm;
 
     public static void setSm(ShardManager sm) {
@@ -26,8 +27,7 @@ public class Config {
 
         EmbedBuilder builder = new EmbedBuilder();
         builder.setColor(Config.DEFAULT_COLOR).
-                setThumbnail(thisBot.getAvatarUrl())
-                .setFooter("bot");
+                setThumbnail(thisBot.getAvatarUrl());
         return builder;
     }
 }
