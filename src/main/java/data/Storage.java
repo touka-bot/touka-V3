@@ -9,4 +9,8 @@ public class Storage {
     public static long getSearchesCount() {
         return 1;
     }
+
+    public static String getProvider(long userID) {
+        return "animekisa";
+    }
 }

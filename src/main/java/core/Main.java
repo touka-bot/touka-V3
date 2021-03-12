@@ -4,6 +4,9 @@ import cofig.Config;
 import commands.info.HelpCommand;
 import commands.info.InfoCommand;
 import commands.info.InviteCommand;
+import commands.info.RebootCommand;
+import commands.search.SearchCommand;
+import commands.search.SearchSection;
 import core.command.CommandListener;
 import core.reactions.ReactionEventListener;
 import core.sections.ChannelMessageListener;
@@ -34,7 +37,7 @@ public class Main {
         builder.setDisabledIntents(GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MEMBERS);
         builder.setMemberCachePolicy(MemberCachePolicy.NONE);
         builder.disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.ROLE_TAGS, CacheFlag.MEMBER_OVERRIDES, CacheFlag.EMOTE, CacheFlag.VOICE_STATE);
-        builder.setShardsTotal(2);
+        builder.setShardsTotal(1);
         builder.addEventListeners(
                 new StartUpListener(),
                 new ChannelMessageListener(),
@@ -51,5 +54,7 @@ public class Main {
         new HelpCommand();
         new InviteCommand();
         new InfoCommand();
+        new SearchCommand();
+        new RebootCommand();
     }
 }

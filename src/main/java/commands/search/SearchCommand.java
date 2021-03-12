@@ -9,6 +9,6 @@ public class SearchCommand extends Command {
 
     @Override
     public void called(String args) {
-
+        new SearchSection(event.getTextChannel().getIdLong(), event.getAuthor().getIdLong(), args, event);
     }
 }
