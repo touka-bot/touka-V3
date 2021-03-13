@@ -10,6 +10,7 @@ import commands.search.SearchSection;
 import core.command.CommandListener;
 import core.reactions.ReactionEventListener;
 import core.sections.ChannelMessageListener;
+import data.Storage;
 import listener.StartUpListener;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -23,10 +24,11 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import javax.security.auth.login.LoginException;
+import java.io.IOException;
 
 public class Main {
 
-    public static void main(String[] args) throws LoginException {
+    public static void main(String[] args) throws LoginException, IOException {
         DefaultShardManagerBuilder builder =
                 DefaultShardManagerBuilder.createDefault("ODE5MjM3MTU0OTc3ODczOTMw.YEjsDg.n20cgALF7DBbrp1-0RnA3Kg_8ok");
         builder.setCompression(Compression.ZLIB);
@@ -47,6 +49,7 @@ public class Main {
 
         ShardManager sm = builder.build();
         Config.setSm(sm);
+        Storage.init();
         setupCommands();
     }
 

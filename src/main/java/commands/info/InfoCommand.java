@@ -4,11 +4,18 @@ import cofig.Config;
 import core.command.Command;
 import data.Storage;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import org.discordbots.api.client.DiscordBotListAPI;
 
 import java.text.NumberFormat;
 import java.util.Locale;
 
 public class InfoCommand extends Command {
+    private static final DiscordBotListAPI dblApi = new DiscordBotListAPI.Builder()
+            .token(Config.DBL_TOKEN)
+            .botId("783720725848129566")
+            .build();
+
+
     public InfoCommand() {
         super("info", "Info about me!");
     }
@@ -17,10 +24,12 @@ public class InfoCommand extends Command {
     public void called(String args) {
         NumberFormat nf = NumberFormat.getInstance(Locale.ENGLISH);
 
+        int serverCount = Config.getServerCount();
+
         MessageEmbed embed = Config.getDefaultEmbed()
                 .setTitle("Info about me")
                 .setDescription("Watch & Browse Anime Series & Movies without any Ads!")
-                .addField("Servers", String.valueOf(Storage.getServerCount()), true)
+                .addField("Servers", nf.format(serverCount), true)
                 .addField("Searches", "" + nf.format(Storage.getSearchesCount()), true)
                 .addField("Discord Server", "[Join!](https://discord.gg/tvDXKZSzqd)", false)
                 .addField("Contribute to the Project", "[GitHub Repo](https://github.com/touka-bot)",true)

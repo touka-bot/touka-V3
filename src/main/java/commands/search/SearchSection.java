@@ -5,29 +5,40 @@ import core.sections.Section;
 import data.Storage;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import org.discordbots.api.client.DiscordBotListAPI;
 
 import java.util.List;
+import java.util.concurrent.CompletionStage;
 
 public class SearchSection extends Section {
 
     private static final String URL_FILTER_PATTERN = "https?://.+?\\.\\w\\w/";
 
-    private SearchState state;
+    private static final DiscordBotListAPI dblApi = new DiscordBotListAPI.Builder()
+            .token(Config.DBL_TOKEN)
+            .botId("783720725848129566")
+            .build();
 
-    private ApiRequest request;
+    private final CompletionStage<Boolean> dplRequest;
+    private SearchState state;
+    private final ApiRequest request;
+
 
     public SearchSection(long textChannelID, long userID, String query, MessageReceivedEvent event) {
         super(textChannelID, userID);
         this.event = event;
-        this.request = new ApiRequest(Storage.getProvider(userID));
+        this.request = new ApiRequest(Storage.getProvider(String.valueOf(userID)));
 
         state = SearchState.ENTERED_QUERY;
 
+        dplRequest = dblApi.hasVoted(String.valueOf(userID));
+
         request.fetchShows(query, shows -> {
-            System.out.println("Fetched results");
             sendShows(shows);
             state = SearchState.RECEIVED_SHOW_LIST;
         });
+
+        Storage.addSearch(request.getShowName());
     }
 
     @Override
@@ -42,12 +53,13 @@ public class SearchSection extends Section {
 
     private void selectShow(String args) {
         try {
-            int showI = Integer.parseInt(args);
-            request.fetchEpisodes(showI, episodes -> {
-                System.out.println("Fetched Episodes");
-                sendEpisodes(episodes.size());
-                state = SearchState.RECEIVED_EPISODE_LIST;
-            });
+            int showIndex = Integer.parseInt(args);
+            request.fetchEpisodes(showIndex)
+                    .thenAccept(e -> {
+                        System.out.println("Fetched Episodes");
+                        sendEpisodes(e.size());
+                        state = SearchState.RECEIVED_EPISODE_LIST;
+                    });
 
             state = SearchState.RECEIVED_EPISODE_LIST;
         } catch (NumberFormatException e) {
@@ -63,13 +75,14 @@ public class SearchSection extends Section {
                 int to = Integer.parseInt(split[1]); //inclusive
 
                 for (int i = from; i < to; i++) {
-                    request.fetchEpisode(i, this::sendEpisode);
+                    int i2 = i;
+                    request.fetchEpisode(i, s -> sendEpisode(s, i2));
                 }
 
             } else {
                 int episode = Integer.parseInt(args.trim());
 
-                request.fetchEpisode(episode, this::sendEpisode);
+                request.fetchEpisode(episode, s -> sendEpisode(s, episode));
             }
 
             state = SearchState.SELECTED_EPISODE;
@@ -98,11 +111,18 @@ public class SearchSection extends Section {
         reply(s);
     }
 
-    private void sendEpisode(String link ){
-        EmbedBuilder builder = Config.getDefaultEmbed()
-                .setDescription("Ready to Watch!");
+    private void sendEpisode(String link, int episodeIndex) {
+        String show = request.getShowName();
 
-        boolean hasVoted = true;
+        EmbedBuilder builder = Config.getDefaultEmbed()
+                .setDescription("Ready to Watch!")
+                .setTitle(show + " - episode " + episodeIndex);
+
+
+        System.out.println("Waiting for DBL...");
+        boolean hasVoted = dplRequest.toCompletableFuture().join();
+        System.out.println("User has " + (hasVoted ? "" : "not ") + "voted");
+
         if (hasVoted) {
             builder.addField("Direct View", "[[Host 1]](" + link + ")", false);
         } else {

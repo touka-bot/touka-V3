@@ -1,6 +1,7 @@
 package commands.search;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -17,6 +18,7 @@ public class ApiRequest {
 
     public ApiRequest(String provider) {
         this.provider = provider;
+        System.out.println(provider);
     }
 
     public void fetchShows(String query, Consumer<List<String>> callback) {
@@ -46,22 +48,34 @@ public class ApiRequest {
         return shows;
     }
 
-    public void fetchEpisodes(int showIndex, Consumer<List<String>> callback) {
+    public CompletableFuture<List<String>> fetchEpisodes(int showIndex) {
         String route = String.format("%s/%s/%d", provider, query, showIndex);
         this.showIndex = showIndex;
 
-        String show = shows.get(showIndex);
         episodes = IntStream.range(0, 1000).mapToObj(String::valueOf).map(e -> "hxh-episode-" + e).collect(Collectors.toUnmodifiableList());
         System.out.println("Fetching episodes...");
 
-        callback.accept(episodes);
+        return CompletableFuture
+                .supplyAsync(() -> IntStream.range(0, 1000)
+                        .mapToObj(String::valueOf)
+                        .map(e -> "hxh-episode-" + e)
+                        .collect(Collectors.toUnmodifiableList()))
+                .thenApply(e -> {
+                    this.episodes = e;
+                    return e;
+                });
     }
 
     public void fetchEpisode(int episodeIndex, Consumer<String> callback) {
+
         String route = String.format("%s/%s/%d/%d", provider, query, showIndex, episodeIndex);
         String episode = "https://namespace.media/";
 
         callback.accept(episode);
+    }
+
+    public String getShowName() {
+        return replaceLink(shows.get(showIndex));
     }
 
     public int getEpisodeAmount() {
@@ -74,5 +88,12 @@ public class ApiRequest {
 
     public String getEpisode(int index) {
         return episodes.get(index);
+    }
+
+
+    private String replaceLink(String s) {
+        return s.replace("https://4anime.to/anime/", "")
+                .replace("https://animekisa.tv/", "")
+                .replace("-", " ");
     }
 }
