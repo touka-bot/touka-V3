@@ -16,7 +16,7 @@ public class Storage {
 
     public static long getSearchesCount() {
         return searches.keySet().stream()
-                .mapToLong(s -> (long) searches.get(s))
+                .mapToLong(s -> Long.parseLong((String) searches.get(s)))
                 .sum();
     }
 

@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.sharding.ShardManager;
 
 import java.awt.*;
+import java.util.List;
 
 public class Config {
 
@@ -33,6 +34,14 @@ public class Config {
     }
 
     public static int getServerCount() {
-        return sm.getGuilds().size();
+        long time = System.nanoTime();
+        int count = sm.getShards().stream()
+                .map(JDA::getGuilds)
+                .mapToInt(List::size)
+                .sum();
+        long time2 = System.nanoTime();
+        System.out.printf("Time: %,dns", time2 - time);
+
+        return count;
     }
 }
