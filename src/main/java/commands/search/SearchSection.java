@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.discordbots.api.client.DiscordBotListAPI;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 
@@ -19,24 +20,40 @@ public class SearchSection extends Section {
             .botId("783720725848129566")
             .build();
 
-    private final CompletionStage<Boolean> dplRequest;
+    private CompletionStage<Boolean> dplRequest;
     private SearchState state;
-    private final ApiRequest request;
+    private ApiRequest request;
 
 
     public SearchSection(long textChannelID, long userID, String query, MessageReceivedEvent event) {
         super(textChannelID, userID);
         this.event = event;
-        this.request = new ApiRequest(Storage.getProvider(String.valueOf(userID)));
+
+        if (query.isBlank()) {
+            reply("Query must not be empty");
+            dispose();
+            return;
+        }
+
+        this.request = new ApiRequest();
 
         state = SearchState.ENTERED_QUERY;
 
         dplRequest = dblApi.hasVoted(String.valueOf(userID));
 
-        request.fetchShows(query, shows -> {
+        try {
+            List<String> shows = request.fetchShows(query);
+            if (shows.isEmpty()) {
+                reply("No shows found.");
+                dispose();
+                state = SearchState.ERROR;
+                return;
+            }
             sendShows(shows);
-            state = SearchState.RECEIVED_SHOW_LIST;
-        });
+        } catch (IOException e) {
+            sendUnexpectedError(e);
+        }
+        state = SearchState.RECEIVED_SHOW_LIST;
 
         Storage.addSearch(request.getShowName());
     }
@@ -54,16 +71,14 @@ public class SearchSection extends Section {
     private void selectShow(String args) {
         try {
             int showIndex = Integer.parseInt(args);
-            request.fetchEpisodes(showIndex)
-                    .thenAccept(e -> {
-                        System.out.println("Fetched Episodes");
-                        sendEpisodes(e.size());
-                        state = SearchState.RECEIVED_EPISODE_LIST;
-                    });
-
+            System.out.println("Fetched Episodes");
+            sendEpisodes(request.fetchEpisodes(showIndex).size());
             state = SearchState.RECEIVED_EPISODE_LIST;
+
         } catch (NumberFormatException e) {
             reply("Invalid input, please try again.");
+        } catch (IOException e) {
+            sendUnexpectedError(e);
         }
     }
 
@@ -75,19 +90,20 @@ public class SearchSection extends Section {
                 int to = Integer.parseInt(split[1]); //inclusive
 
                 for (int i = from; i < to; i++) {
-                    int i2 = i;
-                    request.fetchEpisode(i, s -> sendEpisode(s, i2));
+                    sendEpisode(request.fetchEpisode(i), i);
                 }
 
             } else {
                 int episode = Integer.parseInt(args.trim());
 
-                request.fetchEpisode(episode, s -> sendEpisode(s, episode));
+                sendEpisode(request.fetchEpisode(episode), episode);
             }
 
             state = SearchState.SELECTED_EPISODE;
         } catch (NumberFormatException e) {
             reply("Invalid input, please try again.");
+        } catch (IOException e) {
+            sendUnexpectedError(e);
         }
     }
 
@@ -123,6 +139,8 @@ public class SearchSection extends Section {
         boolean hasVoted = dplRequest.toCompletableFuture().join();
         System.out.println("User has " + (hasVoted ? "" : "not ") + "voted");
 
+        System.out.println("link: " + link);
+
         if (hasVoted) {
             builder.addField("Direct View", "[[Host 1]](" + link + ")", false);
         } else {
@@ -134,8 +152,17 @@ public class SearchSection extends Section {
         reply(builder.build());
         dispose();
     }
+
+    private void sendUnexpectedError(Exception e) {
+        reply(Config.getDefaultEmbed()
+                .setTitle("Error while requesting episode...")
+                .addField("Message: ", e.getMessage(), false)
+                .addField("", "Please report this on the [Touka dev server](https://discord.gg/tvDXKZSzqd)", false)
+                .build());
+    }
+
 }
 
 enum SearchState {
-    ENTERED_QUERY, RECEIVED_SHOW_LIST, SELECTED_SHOW, RECEIVED_EPISODE_LIST, SELECTED_EPISODE
+    ENTERED_QUERY, RECEIVED_SHOW_LIST, SELECTED_SHOW, RECEIVED_EPISODE_LIST, SELECTED_EPISODE, ERROR
 }
