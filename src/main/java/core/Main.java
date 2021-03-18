@@ -1,19 +1,13 @@
 package core;
 
 import cofig.Config;
-import commands.info.HelpCommand;
-import commands.info.InfoCommand;
-import commands.info.InviteCommand;
-import commands.info.RebootCommand;
+import commands.info.*;
 import commands.search.SearchCommand;
-import commands.search.SearchSection;
 import core.command.CommandListener;
 import core.reactions.ReactionEventListener;
 import core.sections.ChannelMessageListener;
 import data.Storage;
 import listener.StartUpListener;
-import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -59,5 +53,6 @@ public class Main {
         new InfoCommand();
         new SearchCommand();
         new RebootCommand();
+        new TopCommand();
     }
 }

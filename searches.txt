@@ -1,5 +1,0 @@
-#
-#Tue Mar 16 15:09:18 CET 2021
-hunter\ x\ hunter=2
-hunter\ x\ hunter\ 2011=3
-noragami\ aragoto=1

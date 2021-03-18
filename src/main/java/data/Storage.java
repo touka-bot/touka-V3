@@ -1,18 +1,26 @@
 package data;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.Properties;
+import java.util.stream.Stream;
 
 public class Storage {
 
-    private static final String DEFAULT_PROVIDER = "animekisa";
-    private static final String SEARCHES_PATH = "searches.txt";
-    private static final String PROVIDER_PATH = "providers.txt";
+    private static final String SEARCHES_PATH = "searches.properties";
 
-    private static Properties providers;
     private static Properties searches;
+
+    public static Stream<KeyPair> getTopSearches(int amount) {
+        return searches.keySet().stream()
+                .map(k -> new KeyPair(k, searches.get(k)))
+                .sorted(Comparator.reverseOrder())
+                .limit(amount);
+    }
 
     public static long getSearchesCount() {
         return searches.keySet().stream()
@@ -34,27 +42,33 @@ public class Storage {
         }
     }
 
-    public static void setProvider(String uid, String provider) {
-        providers.setProperty(uid, provider);
-        try {
-            providers.store(new FileWriter(PROVIDER_PATH), "");
-        } catch (IOException e) {
-            System.err.println("Error writing Providers File: " + e.getMessage() + "\n" +
-                    "User: " + uid + "\n" +
-                    "Provider: " + provider);
-        }
-    }
-
-
-    public static String getProvider(String userID) {
-        return (String) providers.getOrDefault(userID, DEFAULT_PROVIDER);
-    }
-
     public static void init() throws IOException {
-        providers = new Properties();
         searches = new Properties();
 
-        providers.load(new FileReader(PROVIDER_PATH));
         searches.load(new FileReader(SEARCHES_PATH));
+    }
+
+    public static class KeyPair implements Comparable<KeyPair>{
+        private final String key;
+        private final int value;
+
+        public KeyPair(Object key, Object value) {
+            this.key = (String) key;
+            this.value = Integer.parseInt((String) value);
+        }
+
+        public String getKey() {
+            return key;
+        }
+
+        public int getValue() {
+            return value;
+        }
+
+
+        @Override
+        public int compareTo(@NotNull Storage.KeyPair o) {
+            return Integer.compare(this.value, o.value);
+        }
     }
 }

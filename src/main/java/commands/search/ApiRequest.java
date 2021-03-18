@@ -1,5 +1,6 @@
 package commands.search;
 
+import cofig.Config;
 import org.json.JSONArray;
 
 import java.io.IOException;
@@ -132,6 +133,10 @@ public class ApiRequest {
         return arr.toList().stream()
                 .map(o -> (String) o)
                 .collect(Collectors.toList());
+    }
+
+    public String getQuery() {
+        return query;
     }
 
     public static void main(String[] args) throws IOException {

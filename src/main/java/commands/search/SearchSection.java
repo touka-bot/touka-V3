@@ -4,21 +4,29 @@ import cofig.Config;
 import core.sections.Section;
 import data.Storage;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.discordbots.api.client.DiscordBotListAPI;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.CompletionStage;
 
 public class SearchSection extends Section {
 
     private static final String URL_FILTER_PATTERN = "https?://.+?\\.\\w\\w/";
 
+    private static final long TIMEOUT = 60000;
+
+
     private static final DiscordBotListAPI dblApi = new DiscordBotListAPI.Builder()
             .token(Config.DBL_TOKEN)
             .botId("783720725848129566")
             .build();
+    private static final int MAX_SHOW_LINES = 10;
 
     private CompletionStage<Boolean> dplRequest;
     private SearchState state;
@@ -56,12 +64,29 @@ public class SearchSection extends Section {
         state = SearchState.RECEIVED_SHOW_LIST;
 
         Storage.addSearch(request.getShowName());
+
+        //SECTION TIMEOUT
+        //is safe because listeners can be removed multiple times
+        final Timer t = new Timer();
+        t.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                dispose();
+                t.cancel();
+            }
+        }, TIMEOUT);
     }
 
     @Override
     public void called(String args) {
+        if (args.equals("x")) {
+            reply("Section closed.");
+            dispose();
+            return;
+        }
+
         switch (state) {
-            case ENTERED_QUERY, SELECTED_EPISODE, SELECTED_SHOW -> reply("Please wait until the results are found.");
+            case ENTERED_QUERY, SELECTED_EPISODE, SELECTED_SHOW -> reply("Please wait until the results are found. Exit the section with 'x'");
             case RECEIVED_SHOW_LIST -> selectShow(args);
             case RECEIVED_EPISODE_LIST -> selectEpisode(args);
         }
@@ -71,12 +96,11 @@ public class SearchSection extends Section {
     private void selectShow(String args) {
         try {
             int showIndex = Integer.parseInt(args);
-            System.out.println("Fetched Episodes");
             sendEpisodes(request.fetchEpisodes(showIndex).size());
             state = SearchState.RECEIVED_EPISODE_LIST;
 
         } catch (NumberFormatException e) {
-            reply("Invalid input, please try again.");
+            sendExpectedError(e);
         } catch (IOException e) {
             sendUnexpectedError(e);
         }
@@ -101,22 +125,42 @@ public class SearchSection extends Section {
 
             state = SearchState.SELECTED_EPISODE;
         } catch (NumberFormatException e) {
-            reply("Invalid input, please try again.");
+            sendExpectedError(e);
         } catch (IOException e) {
             sendUnexpectedError(e);
         }
     }
 
     private void sendShows(List<String> shows) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("```");
 
+        List<MessageEmbed> embeds = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+
+        int lines = 0;
+
+        sb.append("```");
         for (int i = 0; i < shows.size(); i++) {
             sb.append(i).append(" ").append(shows.get(i).replaceAll(URL_FILTER_PATTERN, "")).append("\n");
+            lines++;
+
+            if (sb.length() > 800 || lines > MAX_SHOW_LINES) {
+                sb.append("```");
+                embeds.add(Config.getDefaultEmbed()
+                        .addField("Shows", sb.toString(), false)
+                        .build());
+                sb = new StringBuilder();
+                sb.append("```");
+                lines = 0;
+            }
         }
 
-        sb.append("```");
-        reply(sb.toString());
+        if (embeds.size() > 1) {
+            reply(embeds.toArray(new MessageEmbed[0]));
+        } else {
+            reply(embeds.get(0));
+        }
+
+
     }
 
     private void sendEpisodes(int episodeAmount) {
@@ -134,12 +178,7 @@ public class SearchSection extends Section {
                 .setDescription("Ready to Watch!")
                 .setTitle(show + " - episode " + episodeIndex);
 
-
-        System.out.println("Waiting for DBL...");
         boolean hasVoted = dplRequest.toCompletableFuture().join();
-        System.out.println("User has " + (hasVoted ? "" : "not ") + "voted");
-
-        System.out.println("link: " + link);
 
         if (hasVoted) {
             builder.addField("Direct View", "[[Host 1]](" + link + ")", false);
@@ -153,12 +192,13 @@ public class SearchSection extends Section {
         dispose();
     }
 
+    private void sendExpectedError(Exception e) {
+        reply("Invalid input, please try again. Exit the section with 'x'");
+    }
+
     private void sendUnexpectedError(Exception e) {
-        reply(Config.getDefaultEmbed()
-                .setTitle("Error while requesting episode...")
-                .addField("Message: ", e.getMessage(), false)
-                .addField("", "Please report this on the [Touka dev server](https://discord.gg/tvDXKZSzqd)", false)
-                .build());
+        reply("An unexpected error occurred and has been reported to the Touka dev team. Please try again.");
+        e.printStackTrace();
     }
 
 }
