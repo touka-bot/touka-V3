@@ -9,10 +9,9 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.discordbots.api.client.DiscordBotListAPI;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 import java.util.concurrent.CompletionStage;
 
 public class SearchSection extends Section {
@@ -185,7 +184,21 @@ public class SearchSection extends Section {
         } else {
             builder.addField("Direct View", "[Vote to get Direct View](https://top.gg/bot/783720725848129566/vote)", false);
         }
-        builder.addField("Web View", "[FLUID](" + link + ")", false)
+
+        String webViewLink = "";
+        try {
+             webViewLink = String.format("https://4c3711.xyz/touka/redirect?url=%s&title=%s&ep=%s",
+                    Base64.getUrlEncoder().encodeToString(link.getBytes(StandardCharsets.UTF_8)),
+                    URLEncoder.encode(request.getShowName(), StandardCharsets.UTF_8.toString()),
+                    episodeIndex);
+
+        } catch (Exception e) {
+            sendUnexpectedError(e);
+            return;
+        }
+
+
+        builder.addField("Web View", "[Web View](" + webViewLink + ")", false)
                 .setFooter("'Direct View' might not always work. In that case use the Web View.");
 
         reply(builder.build());
@@ -198,6 +211,7 @@ public class SearchSection extends Section {
 
     private void sendUnexpectedError(Exception e) {
         reply("An unexpected error occurred and has been reported to the Touka dev team. Please try again.");
+        dispose();
         e.printStackTrace();
     }
 

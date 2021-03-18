@@ -1,6 +1,5 @@
 package commands.search;
 
-import cofig.Config;
 import org.json.JSONArray;
 
 import java.io.IOException;
@@ -12,7 +11,6 @@ import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class ApiRequest {
 
@@ -28,7 +26,6 @@ public class ApiRequest {
         String route = String.format("%s/%s/", provider, query); //  animekisa/hunter-x-hunter/
         this.query = query;
 
-        System.out.println("Fetching shows...");
 
         shows = jsonArrayToList(request(route));
 
@@ -68,7 +65,6 @@ public class ApiRequest {
 
         String route = String.format("%s/%s/%d/%d", provider, query, showIndex, episodeIndex);
         String episode = requestSingle(route);
-        System.out.println("Episode: " + episode);
 
         return episode;
     }
@@ -148,4 +144,6 @@ public class ApiRequest {
         System.out.println(new ApiRequest().request(route2));
         System.out.println(new ApiRequest().requestSingle(route3));
     }
+
+
 }

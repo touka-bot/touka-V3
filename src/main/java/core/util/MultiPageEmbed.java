@@ -68,8 +68,6 @@ public class MultiPageEmbed extends ReactionAdapter {
         }
         if (event.getUser() != null) {
             event.getReaction().removeReaction(event.getUser()).queue();
-        } else {
-            System.err.println("[MultiPageEmbed] Reaction user was null");
         }
     }
 }

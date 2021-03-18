@@ -34,8 +34,13 @@
 
     <repositories>
         <repository>
+            <id>jitpack.io</id>
+            <name>JitPack</name>
+            <url>https://jitpack.io</url>
+        </repository>
+        <repository>
             <id>jcenter</id>
-            <name>jcenter-bintray</name>
+            <name>JCenter</name>
             <url>https://jcenter.bintray.com</url>
         </repository>
         <repository>
@@ -60,7 +65,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>MAIN_CLASS</mainClass>
+                            <mainClass>core.Main</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

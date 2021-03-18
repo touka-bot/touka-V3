@@ -4,17 +4,11 @@ import cofig.Config;
 import core.command.Command;
 import data.Storage;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import org.discordbots.api.client.DiscordBotListAPI;
 
 import java.text.NumberFormat;
 import java.util.Locale;
 
 public class InfoCommand extends Command {
-    private static final DiscordBotListAPI dblApi = new DiscordBotListAPI.Builder()
-            .token(Config.DBL_TOKEN)
-            .botId("783720725848129566")
-            .build();
-
 
     public InfoCommand() {
         super("info", "Info about me!");

@@ -41,7 +41,6 @@ public class Config {
                 .mapToInt(List::size)
                 .sum();
         long time2 = System.nanoTime();
-        System.out.printf("Time: %,dns", time2 - time);
 
         return count;
     }
