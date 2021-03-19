@@ -154,6 +154,10 @@ public class SearchSection extends Section {
             }
         }
 
+        embeds.add(Config.getDefaultEmbed()
+                .addField("Shows", sb.toString(), false)
+                .build());
+
         if (embeds.size() > 1) {
             reply(60000, embeds.toArray(new MessageEmbed[0]));
         } else {
