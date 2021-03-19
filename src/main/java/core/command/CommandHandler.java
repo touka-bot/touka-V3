@@ -67,9 +67,9 @@ public class CommandHandler {
      */
     public static EmbedBuilder getHelpList() {
         EmbedBuilder builder = Config.getDefaultEmbed();
-        builder.setTitle("Touka help");
+        builder.setTitle("Touka's Commands");
         for (Command s : commands.values()) {
-            builder.addField(s.getName(), s.getDescription(), false);
+            builder.addField(Config.PREFIX + s.getName(), "`" + s.getDescription() + "`", false);
         }
         return builder;
     }

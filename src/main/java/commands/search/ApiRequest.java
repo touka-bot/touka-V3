@@ -74,7 +74,7 @@ public class ApiRequest {
     private String readContentFromUrl(String url) throws IOException {
         URLConnection conn = new URL(url).openConnection();
         conn.setConnectTimeout(10000);
-        conn.setReadTimeout(10000);
+        conn.setReadTimeout(20000);
 
         try (InputStream is = conn.getInputStream();
              InputStreamReader rd = new InputStreamReader(is, StandardCharsets.UTF_8)) {
