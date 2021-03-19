@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,9 +24,9 @@ public class ApiRequest {
     private int showIndex;
 
     public List<String> fetchShows(String query) throws IOException {
-        String route = String.format("%s/%s/", provider, query.replaceAll(" ", "+")); //  animekisa/hunter-x-hunter/
-        this.query = query;
+        this.query = URLEncoder.encode(query, StandardCharsets.UTF_8.toString());
 
+        String route = String.format("%s/%s/", provider, this.query); //  animekisa/hunter-x-hunter/
 
         shows = jsonArrayToList(request(route));
 
@@ -64,9 +65,8 @@ public class ApiRequest {
     public String fetchEpisode(int episodeIndex) throws IOException {
 
         String route = String.format("%s/%s/%d/%d", provider, query, showIndex, episodeIndex);
-        String episode = requestSingle(route);
 
-        return episode;
+        return requestSingle(route);
     }
 
     public String getShowName() {
@@ -131,9 +131,6 @@ public class ApiRequest {
                 .collect(Collectors.toList());
     }
 
-    public String getQuery() {
-        return query;
-    }
 
     public static void main(String[] args) throws IOException {
         String route = String.format("%s/%s", "animekisa", "hunter");

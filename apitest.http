@@ -1,0 +1,5 @@
+GET http://4c3711.xyz:3000/touka/api/v2/getanime/animekisa/hunter%20x%20hunter
+###
+GET http://4c3711.xyz:3000/touka/api/v2/getanime/animekisa/shingeki%20no%20kyojin
+###
+GET http://4c3711.xyz:3000/touka/api/v2/getanime/animekisa/noragami
