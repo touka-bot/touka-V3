@@ -67,7 +67,7 @@ public class CommandHandler {
      */
     public static EmbedBuilder getHelpList() {
         EmbedBuilder builder = Config.getDefaultEmbed();
-        builder.setTitle("Killua help");
+        builder.setTitle("Touka help");
         for (Command s : commands.values()) {
             builder.addField(s.getName(), s.getDescription(), false);
         }
@@ -90,7 +90,7 @@ public class CommandHandler {
         for (Command value : commands.values()) {
             if (i % MAX_HELP_PAGE_LENGTH == 0) {
                 builder = Config.getDefaultEmbed();
-                builder.setTitle("Killua help");
+                builder.setTitle("Touka help");
                 builders[j] = builder;
                 j++;
             }
@@ -115,7 +115,7 @@ public class CommandHandler {
         Command cmd = commands.get(command);
         if (cmd != null) {
             EmbedBuilder builder = Config.getDefaultEmbed()
-                    .setTitle("Killua help: " + cmd.getName())
+                    .setTitle("Touka help: " + cmd.getName())
                     .addField("Name", cmd.getName(), true)
                     .addField("Description:", cmd.getDetailDescription(), true)
                     .addField("Example usage", "`" + cmd.getExampleUsage() + "`", true);

@@ -6,13 +6,12 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.sharding.ShardManager;
 
 import java.awt.*;
-import java.util.Date;
 import java.util.List;
 
 public class Config {
 
-    public static final String PREFIX = "<";
-    public static final Color DEFAULT_COLOR = new Color(255, 255, 255);
+    public static final String PREFIX = ">";
+    public static final Color DEFAULT_COLOR = new Color(40, 38, 38);
     public static final long THIS_ID = 819237154977873930L;
     public static final String VERSION = "3.0.0";
     public static final String DBL_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc4MzcyMDcyNTg0ODEyOTU2NiIsImJvdCI6dHJ1ZSwiaWF0IjoxNjEwOTU4NjM0fQ.tvBj4mWyIKOpYimt6hCvShwlUm7vX63Zz0evPszNFY8";
@@ -35,13 +34,9 @@ public class Config {
     }
 
     public static int getServerCount() {
-        long time = System.nanoTime();
-        int count = sm.getShards().stream()
+        return sm.getShards().stream()
                 .map(JDA::getGuilds)
                 .mapToInt(List::size)
                 .sum();
-        long time2 = System.nanoTime();
-
-        return count;
     }
 }

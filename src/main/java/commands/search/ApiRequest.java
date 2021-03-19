@@ -20,7 +20,6 @@ public class ApiRequest {
 
     private List<String> shows;
     private String query;
-    private List<String> episodes;
     private int showIndex;
 
     public List<String> fetchShows(String query) throws IOException {
@@ -39,8 +38,7 @@ public class ApiRequest {
 
         System.out.println("Fetching episodes...");
 
-        this.episodes = jsonArrayToList(request(route));
-        return episodes;
+        return jsonArrayToList(request(route));
     }
 
     public String fetchEpisode(int episodeIndex) throws IOException {

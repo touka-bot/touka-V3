@@ -2,9 +2,7 @@ package commands.info;
 
 import cofig.Config;
 import core.command.Command;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.User;
 
 public class InviteCommand extends Command {
 
