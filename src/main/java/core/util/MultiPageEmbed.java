@@ -6,6 +6,9 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 /**
  * This class sends a message to the channel in the event that contains multiple pages that can be navigated using reactinos
  */
@@ -46,6 +49,21 @@ public class MultiPageEmbed extends ReactionAdapter {
             message.addReaction(nextReaction).queue();
             create(message1.getIdLong());
         });
+    }
+
+    public MultiPageEmbed(MessageReceivedEvent event, long timeout, MessageEmbed[] pages) {
+        this(event, PREVIOUS_PAGE_DEFAULT_REACTION, NEXT_PAGE_DEFAULT_REACTION, pages);
+
+        //MPE TIMEOUT
+        //is safe because listeners can be removed multiple times
+        final Timer t = new Timer();
+        t.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                dispose();
+                t.cancel();
+            }
+        }, timeout);
     }
 
     @Override

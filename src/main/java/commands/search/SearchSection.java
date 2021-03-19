@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.discordbots.api.client.DiscordBotListAPI;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -154,7 +155,7 @@ public class SearchSection extends Section {
         }
 
         if (embeds.size() > 1) {
-            reply(embeds.toArray(new MessageEmbed[0]));
+            reply(60000, embeds.toArray(new MessageEmbed[0]));
         } else {
             reply(embeds.get(0));
         }
@@ -185,14 +186,14 @@ public class SearchSection extends Section {
             builder.addField("Downloads", "[Vote for Downloads](https://top.gg/bot/783720725848129566/vote)", false);
         }
 
-        String webViewLink = "";
+        String webViewLink;
         try {
              webViewLink = String.format("https://4c3711.xyz/touka/watch?url=%s&title=%s&ep=%s",
                     Base64.getUrlEncoder().encodeToString(link.getBytes(StandardCharsets.UTF_8)),
                     URLEncoder.encode(request.getShowName(), StandardCharsets.UTF_8.toString()),
                     episodeIndex);
 
-        } catch (Exception e) {
+        } catch (UnsupportedEncodingException e) {
             sendUnexpectedError(e);
             return;
         }

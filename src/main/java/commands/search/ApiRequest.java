@@ -30,24 +30,6 @@ public class ApiRequest {
 
         shows = jsonArrayToList(request(route));
 
-        /*shows = List.of("hunter-x-hunter-2011",
-                "https://animekisa.tv/hunter-x-hunter",
-                "https://animekisa.tv/hunter-x-hunter-ova",
-                "https://animekisa.tv/hunter-x-hunter-ova-2",
-                "https://animekisa.tv/hunter-x-hunter-ova-3",
-                "https://animekisa.tv/hunter-x-hunter-2011-dubbed",
-                "https://animekisa.tv/hunter-x-hunter-dubbed",
-                "https://animekisa.tv/hunter-x-hunter-phantom-rouge-dubbed",
-                "https://animekisa.tv/hunter-x-hunter-the-last-mission",
-                "https://animekisa.tv/hunter-x-hunter-movie-2-the-last-mission-dubbed",
-                "https://animekisa.tv/hunter-x-hunter-phantom-rouge",
-                "https://animekisa.tv/hunter-x-hunter-movie-2-the-last-mission"
-        );*/
-
-        return shows;
-    }
-
-    public List<String> getShows() {
         return shows;
     }
 
@@ -55,7 +37,6 @@ public class ApiRequest {
         String route = String.format("%s/%s/%d", provider, query, showIndex);
         this.showIndex = showIndex;
 
-        //episodes = IntStream.range(0, 1000).mapToObj(String::valueOf).map(e -> "hxh-episode-" + e).collect(Collectors.toUnmodifiableList());
         System.out.println("Fetching episodes...");
 
         this.episodes = jsonArrayToList(request(route));
@@ -72,19 +53,6 @@ public class ApiRequest {
     public String getShowName() {
         return replaceLink(shows.get(showIndex));
     }
-
-    public int getEpisodeAmount() {
-        return episodes.size();
-    }
-
-    public List<String> getEpisodes() {
-        return episodes;
-    }
-
-    public String getEpisode(int index) {
-        return episodes.get(index);
-    }
-
 
     private String replaceLink(String s) {
         return s.replace("https://4anime.to/anime/", "")

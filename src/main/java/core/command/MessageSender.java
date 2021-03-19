@@ -77,6 +77,21 @@ public abstract class MessageSender {
      * Equivalent to {@code new MultiPageEmbed(event, embeds);}
      * Will not send empty Embeds
      *
+     * @param timeout The timeout in milliseconds
+     * @param embeds The embeds
+     */
+    protected void reply(long timeout, MessageEmbed... embeds) {
+        if (!embeds[0].isEmpty()) {
+            new MultiPageEmbed(event, timeout, embeds);
+        }
+    }
+
+
+    /**
+     * Send multiple embeds in one message message as a {@code MultiPageEmbed} to the chat original message came from.
+     * Equivalent to {@code new MultiPageEmbed(event, embeds);}
+     * Will not send empty Embeds
+     *
      * @param embeds The embeds
      * @param emote1 The emote for scrolling to the left
      * @param emote2 The emote for scrolling to the right
