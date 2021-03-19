@@ -154,6 +154,8 @@ public class SearchSection extends Section {
             }
         }
 
+        sb.append("```");
+
         embeds.add(Config.getDefaultEmbed()
                 .addField("Shows", sb.toString(), false)
                 .build());
