@@ -180,14 +180,14 @@ public class SearchSection extends Section {
         boolean hasVoted = dplRequest.toCompletableFuture().join();
 
         if (hasVoted) {
-            builder.addField("Direct View", "[[Host 1]](" + link + ")", false);
+            builder.addField("Downloads", "[[Server 1]](" + link + ")", false);
         } else {
-            builder.addField("Direct View", "[Vote to get Direct View](https://top.gg/bot/783720725848129566/vote)", false);
+            builder.addField("Downloads", "[Vote for Downloads](https://top.gg/bot/783720725848129566/vote)", false);
         }
 
         String webViewLink = "";
         try {
-             webViewLink = String.format("https://4c3711.xyz/touka/redirect?url=%s&title=%s&ep=%s",
+             webViewLink = String.format("https://4c3711.xyz/touka/watch?url=%s&title=%s&ep=%s",
                     Base64.getUrlEncoder().encodeToString(link.getBytes(StandardCharsets.UTF_8)),
                     URLEncoder.encode(request.getShowName(), StandardCharsets.UTF_8.toString()),
                     episodeIndex);

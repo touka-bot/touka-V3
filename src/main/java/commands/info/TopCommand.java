@@ -16,7 +16,7 @@ public class TopCommand extends Command {
     @Override
     public void called(String args) {
         EmbedBuilder builder = Config.getDefaultEmbed();
-        builder.setTitle("Top searched animes");
+        builder.setTitle("Top searched shows");
 
         Storage.getTopSearches(10)
                 .map(s -> new MessageEmbed.Field(s.getKey(), "> **" + s.getValue() + "** searches", false))

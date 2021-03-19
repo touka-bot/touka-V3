@@ -23,7 +23,7 @@ public class ApiRequest {
     private int showIndex;
 
     public List<String> fetchShows(String query) throws IOException {
-        String route = String.format("%s/%s/", provider, query); //  animekisa/hunter-x-hunter/
+        String route = String.format("%s/%s/", provider, query.replaceAll(" ", "+")); //  animekisa/hunter-x-hunter/
         this.query = query;
 
 
