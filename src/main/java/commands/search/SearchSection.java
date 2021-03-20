@@ -200,7 +200,6 @@ public class SearchSection extends Section {
         String thumbnail = request.fetchThumbnail();
 
         builder.addField("Web View", "[Web View](" + webViewLink + ")", false)
-                .setFooter("'Direct View' might not always work. In that case use the Web View.")
                 .setThumbnail(thumbnail);
 
         reply(builder.build());
