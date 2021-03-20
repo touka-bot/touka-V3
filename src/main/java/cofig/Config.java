@@ -17,6 +17,8 @@ public class Config {
     public static final String DBL_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc4MzcyMDcyNTg0ODEyOTU2NiIsImJvdCI6dHJ1ZSwiaWF0IjoxNjEwOTU4NjM0fQ.tvBj4mWyIKOpYimt6hCvShwlUm7vX63Zz0evPszNFY8";
     private static ShardManager sm;
 
+    private static int serverCount;
+
     public static void setSm(ShardManager sm) {
         Config.sm = sm;
     }
@@ -33,10 +35,14 @@ public class Config {
         return builder;
     }
 
-    public static int getServerCount() {
-        return sm.getShards().stream()
+    public static void refreshServerCount() {
+         serverCount = sm.getShards().stream()
                 .map(JDA::getGuilds)
                 .mapToInt(List::size)
                 .sum();
+    }
+
+    public static int getServerCount() {
+        return serverCount;
     }
 }

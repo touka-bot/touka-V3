@@ -7,6 +7,8 @@ import core.command.CommandListener;
 import core.reactions.ReactionEventListener;
 import core.sections.ChannelMessageListener;
 import data.Storage;
+import listener.GuildLeaveListener;
+import listener.ServerJoinListener;
 import listener.StartUpListener;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
@@ -38,11 +40,14 @@ public class Main {
                 new StartUpListener(),
                 new ChannelMessageListener(),
                 new CommandListener(),
-                new ReactionEventListener()
+                new ReactionEventListener(),
+                new GuildLeaveListener(),
+                new ServerJoinListener()
         );
 
         ShardManager sm = builder.build();
         Config.setSm(sm);
+        Config.refreshServerCount();
         Storage.init();
         setupCommands();
     }
