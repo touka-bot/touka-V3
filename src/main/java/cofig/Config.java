@@ -27,14 +27,10 @@ public class Config {
     }
 
     public static EmbedBuilder getDefaultEmbed() {
-        User thisBot = sm.getUserById(THIS_ID);
-        if (thisBot == null) {
-            thisBot = sm.retrieveUserById(THIS_ID).complete();
-        }
 
         EmbedBuilder builder = new EmbedBuilder();
         builder.setColor(Config.DEFAULT_COLOR).
-                setThumbnail(thisBot.getAvatarUrl());
+                setThumbnail(sm.getShards().get(0).getSelfUser().getAvatarUrl());
         return builder;
     }
 
