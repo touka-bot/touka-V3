@@ -53,7 +53,7 @@ public class ApiRequest {
 
     public String fetchThumbnail() throws IOException {
 
-        if(thumbnail != null) {
+        if (thumbnail != null) {
             return thumbnail;
         }
 
