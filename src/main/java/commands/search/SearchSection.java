@@ -217,7 +217,7 @@ public class SearchSection extends Section {
 
     private void sendExpectedError(Exception e) {
         reply("Invalid input, please try again. Exit the section with 'x'");
-    }s
+    }
 
     private void sendUnexpectedError(Exception e) {
         reply("An unexpected error occurred and has been reported to the Touka dev team. Please try again.");
