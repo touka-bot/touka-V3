@@ -22,6 +22,8 @@ public class ApiRequest {
     private String query;
     private int showIndex;
 
+    private String thumbnail;
+
     public List<String> fetchShows(String query) throws IOException {
         this.query = URLEncoder.encode(query, StandardCharsets.UTF_8.toString());
 
@@ -50,9 +52,14 @@ public class ApiRequest {
 
 
     public String fetchThumbnail() throws IOException {
-        String route = String.format("%s/%s/%d/thumbnail", provider, query, showIndex);
 
-        return requestSingle(route);
+        if(thumbnail != null) {
+            return thumbnail;
+        }
+
+        String route = String.format("%s/%s/%d/thumbnail", provider, query, showIndex);
+        thumbnail = requestSingle(route);
+        return thumbnail;
     }
 
     public String getShowName() {

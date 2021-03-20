@@ -87,7 +87,7 @@ public class SearchSection extends Section {
 
         try {
             switch (state) {
-                case ENTERED_QUERY, SELECTED_EPISODE, SELECTED_SHOW -> reply("Please wait until the results are found. Exit the section with 'x'");
+                case ENTERED_QUERY, SELECTED_SHOW -> reply("Please wait until the results are found. Exit the section with 'x'");
                 case RECEIVED_SHOW_LIST -> selectShow(args);
                 case RECEIVED_EPISODE_LIST -> selectEpisode(args);
             }
@@ -129,7 +129,7 @@ public class SearchSection extends Section {
                 sendEpisode(request.fetchEpisode(episode), episode);
             }
 
-            state = SearchState.SELECTED_EPISODE;
+            dispose();
         } catch (NumberFormatException e) {
             sendExpectedError(e);
         }
@@ -206,7 +206,6 @@ public class SearchSection extends Section {
                 .setThumbnail(thumbnail);
 
         reply(builder.build());
-        dispose();
     }
 
     private String formatWebViewLink(String link, int episodeIndex) throws UnsupportedEncodingException {
@@ -248,5 +247,5 @@ public class SearchSection extends Section {
 }
 
 enum SearchState {
-    ENTERED_QUERY, RECEIVED_SHOW_LIST, SELECTED_SHOW, RECEIVED_EPISODE_LIST, SELECTED_EPISODE, ERROR
+    ENTERED_QUERY, RECEIVED_SHOW_LIST, SELECTED_SHOW, RECEIVED_EPISODE_LIST, ERROR
 }
