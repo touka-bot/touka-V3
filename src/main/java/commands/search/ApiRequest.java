@@ -86,7 +86,7 @@ public class ApiRequest {
     }
 
     private String readContentFromUrl(String url) throws IOException {
-        System.out.println("Requesting: '" + url + "'");
+        //System.out.println("Requesting: '" + url + "'");
         URLConnection conn = new URL(url).openConnection();
         conn.setConnectTimeout(10000);
         conn.setReadTimeout(20000);
