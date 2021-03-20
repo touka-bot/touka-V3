@@ -1,5 +1,5 @@
 #
-#Fri Mar 19 22:13:39 CET 2021
+#Sat Mar 20 12:50:43 CET 2021
 kono-subarashii-sekai-ni-shukufuku-wo-kurenai-densetsu=2
 koi-to-producer-evolxlove=1
 dragon-ball-z-dub=13
@@ -122,7 +122,7 @@ tonikaku-kawaii=4
 persona-5-the-animation-stars-and-ours=1
 gamers=1
 bleach-movie-3-fade-to-black=6
-noragami=171
+noragami=172
 danganronpa-kibou-no-gakuen-to-zetsubou-no-koukousei-the-animation=15
 yosuga-no-sora-in-solitude-where-we-are-least-alone=32
 tensei-shitara-slime-datta-ken-2nd-season=76
@@ -175,7 +175,7 @@ azur-lane=12
 mushishi=3
 beelzebub=3
 one-punch-man-season-2=9
-so\ i\ cant\ play\ h=1
+so\ i\ cant\ play\ h=4
 hunter-x-hunter-greed-island=12
 jojo-no-kimyou-na-bouken-part-5-ougon-no-kaze=152
 one-piece-movie-14-stampede=8
@@ -290,6 +290,7 @@ charlotte=8
 pokemon-the-origin=3
 boku-no-kanojo-ga-majimesugiru-sho-bitch-na-ken=1
 assassination-classroom-2-dubbed=1
+hunter\ x\ hunter\ 2011=3
 gegege-no-kitarou-2018=1
 vinland-saga=17
 no-game-no-life=16

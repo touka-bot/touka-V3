@@ -19,7 +19,7 @@ public class TopCommand extends Command {
         builder.setTitle("Top searched shows");
 
         Storage.getTopSearches(10)
-                .map(s -> new MessageEmbed.Field(s.getKey(), "> **" + s.getValue() + "** searches", false))
+                .map(s -> new MessageEmbed.Field(s.getKey().replaceAll("-", " "), "> **" + s.getValue() + "** searches", false))
                 .forEach(builder::addField);
 
         reply(builder.build());

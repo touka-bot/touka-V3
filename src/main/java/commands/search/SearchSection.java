@@ -222,6 +222,24 @@ public class SearchSection extends Section {
         e.printStackTrace();
     }
 
+
+    @Override
+    protected void dispose() {
+        if (Math.random() > 0.8) {
+            reply(getToolTip());
+        }
+        super.dispose();
+    }
+
+    public static String getToolTip() {
+        int i = new Random().nextInt(4);
+        return switch (i) {
+            case 0 -> "**Like this Bot?** Recommend it to your Friends: <https://bit.ly/36Dwbij> :sparkling_heart:";
+            case 1 -> ":sparkling_heart: **Like this Bot?** Leave a review here:\nhttps://top.gg/bot/783720725848129566";
+            case 2 -> ":sparkling_heart: Join our **Anime Community** here:\nhttps://discord.gg/tvDXKZSzqd";
+            default -> ":sparkling_heart: **Like this Bot?** Vote for **Touka** here:\nhttps://top.gg/bot/783720725848129566";
+        };
+    }
 }
 
 enum SearchState {

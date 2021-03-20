@@ -43,7 +43,7 @@ public class ApiRequest {
 
     public String fetchEpisode(int episodeIndex) throws IOException {
 
-        String route = String.format("%s/%s/%d/%d", provider, query, showIndex, episodeIndex);
+        String route = String.format("%s/%s/%d/%d", provider, query, showIndex, episodeIndex - 1); //the api works 0 based, the real world is 1 based
 
         return requestSingle(route);
     }
@@ -72,6 +72,7 @@ public class ApiRequest {
     }
 
     private String readContentFromUrl(String url) throws IOException {
+        System.out.println("Requesting: '" + url + "'");
         URLConnection conn = new URL(url).openConnection();
         conn.setConnectTimeout(10000);
         conn.setReadTimeout(20000);
