@@ -48,6 +48,13 @@ public class ApiRequest {
         return requestSingle(route);
     }
 
+
+    public String fetchThumbnail() throws IOException {
+        String route = String.format("%s/%s/%d/thumbnail", provider, query, showIndex);
+
+        return requestSingle(route);
+    }
+
     public String getShowName() {
         return replaceLink(shows.get(showIndex));
     }
@@ -97,18 +104,6 @@ public class ApiRequest {
                 .map(o -> (String) o)
                 .collect(Collectors.toList());
     }
-
-
-    public static void main(String[] args) throws IOException {
-        String route = String.format("%s/%s", "animekisa", "hunter");
-        String route2 = String.format("%s/%s/%d", "animekisa", "hunter", 0);
-        String route3 = String.format("%s/%s/%d/%d", "animekisa", "hunter", 0, 0);
-
-        System.out.println(new ApiRequest().request(route));
-        System.out.println(new ApiRequest().request(route2));
-        System.out.println(new ApiRequest().requestSingle(route3));
-    }
-
 
     public void dump() {
         System.err.println("Query: " + query);

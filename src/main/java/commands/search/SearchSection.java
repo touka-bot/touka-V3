@@ -85,28 +85,29 @@ public class SearchSection extends Section {
             return;
         }
 
-        switch (state) {
-            case ENTERED_QUERY, SELECTED_EPISODE, SELECTED_SHOW -> reply("Please wait until the results are found. Exit the section with 'x'");
-            case RECEIVED_SHOW_LIST -> selectShow(args);
-            case RECEIVED_EPISODE_LIST -> selectEpisode(args);
-        }
-    }
-
-
-    private void selectShow(String args) {
         try {
-            int showIndex = Integer.parseInt(args);
-            sendEpisodes(request.fetchEpisodes(showIndex).size());
-            state = SearchState.RECEIVED_EPISODE_LIST;
-
-        } catch (NumberFormatException e) {
-            sendExpectedError(e);
+            switch (state) {
+                case ENTERED_QUERY, SELECTED_EPISODE, SELECTED_SHOW -> reply("Please wait until the results are found. Exit the section with 'x'");
+                case RECEIVED_SHOW_LIST -> selectShow(args);
+                case RECEIVED_EPISODE_LIST -> selectEpisode(args);
+            }
         } catch (IOException e) {
             sendUnexpectedError(e);
         }
     }
 
-    private void selectEpisode(String args) {
+
+    private void selectShow(String args) throws IOException {
+        try {
+            int showIndex = Integer.parseInt(args);
+            sendEpisodes(request.fetchEpisodes(showIndex).size());
+            state = SearchState.RECEIVED_EPISODE_LIST;
+        } catch (NumberFormatException e) {
+            sendExpectedError(e);
+        }
+    }
+
+    private void selectEpisode(String args) throws IOException {
         try {
             if (args.trim().matches("\\d+ *- *\\d+")) { // x-y
                 String[] split = args.trim().split(" *- *");
@@ -131,8 +132,6 @@ public class SearchSection extends Section {
             state = SearchState.SELECTED_EPISODE;
         } catch (NumberFormatException e) {
             sendExpectedError(e);
-        } catch (IOException e) {
-            sendUnexpectedError(e);
         }
     }
 
@@ -157,7 +156,7 @@ public class SearchSection extends Section {
             sb.append(i).append(" ").append(shows.get(i).replaceAll(URL_FILTER_PATTERN, "")).append("\n");
             lines++;
 
-            if ((sb.length() > 800 || lines > MAX_SHOW_LINES ) && i < shows.size() - 1) { //pgae is full; create a new page but only if its not the last show
+            if ((sb.length() > 800 || lines > MAX_SHOW_LINES) && i < shows.size() - 1) { //pgae is full; create a new page but only if its not the last show
                 sb.append("```"); //close
                 embeds.add(Config.getDefaultEmbed()
                         .addField("Shows", sb.toString(), false)
@@ -184,7 +183,7 @@ public class SearchSection extends Section {
         reply(reply);
     }
 
-    private void sendEpisode(String link, int episodeIndex) {
+    private void sendEpisode(String link, int episodeIndex) throws IOException {
         String show = request.getShowName();
 
         EmbedBuilder builder = Config.getDefaultEmbed()
@@ -200,24 +199,21 @@ public class SearchSection extends Section {
         }
 
         String webViewLink = formatWebViewLink(link, episodeIndex);
+        String thumbnail = request.fetchThumbnail();
 
         builder.addField("Web View", "[Web View](" + webViewLink + ")", false)
-                .setFooter("'Direct View' might not always work. In that case use the Web View.");
+                .setFooter("'Direct View' might not always work. In that case use the Web View.")
+                .setThumbnail(thumbnail);
 
         reply(builder.build());
         dispose();
     }
 
-    private String formatWebViewLink(String link, int episodeIndex) {
-        try {
-            return String.format("https://4c3711.xyz/touka/watch?url=%s&title=%s&ep=%s",
-                    Base64.getUrlEncoder().encodeToString(link.getBytes(StandardCharsets.UTF_8)),
-                    URLEncoder.encode(request.getShowName(), StandardCharsets.UTF_8.toString()),
-                    episodeIndex);
-        } catch (UnsupportedEncodingException e) {
-            sendUnexpectedError(e);
-            return "";
-        }
+    private String formatWebViewLink(String link, int episodeIndex) throws UnsupportedEncodingException {
+        return String.format("https://4c3711.xyz/touka/watch?url=%s&title=%s&ep=%s",
+                Base64.getUrlEncoder().encodeToString(link.getBytes(StandardCharsets.UTF_8)),
+                URLEncoder.encode(request.getShowName(), StandardCharsets.UTF_8.toString()),
+                episodeIndex);
     }
 
     private void sendExpectedError(Exception e) {
