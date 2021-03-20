@@ -11,6 +11,7 @@ public abstract class Command extends MessageSender{
     private final String exampleUsage;
     private final String arguments;
     private final String detailDescription;
+    private final boolean hidden;
     private final CommandParser parser = new CommandParser();
 
 
@@ -28,6 +29,7 @@ public abstract class Command extends MessageSender{
         this.exampleUsage = exampleUsage;
         this.arguments = arguments;
         this.detailDescription = detailDescription;
+        this.hidden = false;
         CommandHandler.addCommand(name, this, false);
     }
 
@@ -62,7 +64,12 @@ public abstract class Command extends MessageSender{
         this.exampleUsage = "";
         this.arguments = "";
         this.detailDescription = "";
+        this.hidden = hidden;
         CommandHandler.addCommand(name, this, hidden);
+    }
+
+    protected void setAlias(String alias) {
+        CommandHandler.addCommand(alias, this, hidden);
     }
 
     public String getName() {

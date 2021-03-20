@@ -18,7 +18,7 @@ public class InfoCommand extends Command {
     public void called(String args) {
         NumberFormat nf = NumberFormat.getInstance(Locale.ENGLISH);
 
-        int serverCount = Config.getServerCount();
+        int serverCount = Config.getGuildCount();
 
         MessageEmbed embed = Config.getDefaultEmbed()
                 .setTitle("Info about me")

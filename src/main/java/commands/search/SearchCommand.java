@@ -5,6 +5,7 @@ import core.command.Command;
 public class SearchCommand extends Command {
     public SearchCommand() {
         super("search", "Search for an anime!", "search hunter x hunter", "<animename>");
+        setAlias("s");
     }
 
     @Override

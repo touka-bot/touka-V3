@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.sharding.ShardManager;
 
 import java.awt.*;
+import java.io.*;
 import java.util.List;
 
 public class Config {
@@ -17,7 +18,9 @@ public class Config {
     public static final String DBL_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc4MzcyMDcyNTg0ODEyOTU2NiIsImJvdCI6dHJ1ZSwiaWF0IjoxNjEwOTU4NjM0fQ.tvBj4mWyIKOpYimt6hCvShwlUm7vX63Zz0evPszNFY8";
     private static ShardManager sm;
 
-    private static int serverCount;
+    private static final String GUILD_COUNT_FILE_NAME = "guild_count.txt";
+
+    private static int guildCount;
 
     public static void setSm(ShardManager sm) {
         Config.sm = sm;
@@ -35,14 +38,30 @@ public class Config {
         return builder;
     }
 
-    public static void refreshServerCount() {
-         serverCount = sm.getShards().stream()
+    public static void refreshGuildCount() {
+         guildCount = sm.getShards().stream()
                 .map(JDA::getGuilds)
                 .mapToInt(List::size)
                 .sum();
+
+         writeGuildCountFile();
     }
 
-    public static int getServerCount() {
-        return serverCount;
+    private static void writeGuildCountFile() {
+        try(BufferedWriter bw = new BufferedWriter(new FileWriter(GUILD_COUNT_FILE_NAME))) {
+            bw.write(String.valueOf(guildCount));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static int getGuildCount() {
+        return guildCount;
+    }
+
+    public static int readGuildCountFile() throws IOException {
+        try(BufferedReader br = new BufferedReader(new FileReader(GUILD_COUNT_FILE_NAME))) {
+            return Integer.parseInt(br.readLine().trim());
+        }
     }
 }

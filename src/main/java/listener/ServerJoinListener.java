@@ -8,6 +8,6 @@ import org.jetbrains.annotations.NotNull;
 public class ServerJoinListener extends ListenerAdapter {
     @Override
     public void onGuildJoin(@NotNull GuildJoinEvent event) {
-        Config.refreshServerCount();
+        Config.refreshGuildCount();
     }
 }

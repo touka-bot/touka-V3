@@ -36,6 +36,7 @@ public class SearchSection extends Section {
     public SearchSection(long textChannelID, long userID, String query, MessageReceivedEvent event) {
         super(textChannelID, userID);
         this.event = event;
+        this.request = new ApiRequest();
 
         if (query.isBlank()) {
             reply("Query must not be empty");
@@ -43,12 +44,40 @@ public class SearchSection extends Section {
             return;
         }
 
-        this.request = new ApiRequest();
-
-        state = SearchState.ENTERED_QUERY;
-
+        setSectionTimeout(TIMEOUT);
         dplRequest = dblApi.hasVoted(String.valueOf(userID));
 
+        state = SearchState.ENTERED_QUERY;
+        nextStep(query);
+    }
+
+    private void nextStep(String args) {
+        try {
+            switch (state) {
+                case ENTERED_QUERY -> searchShow(args);
+                case RECEIVED_SHOW_LIST -> selectShow(args);
+                case RECEIVED_EPISODE_LIST -> selectEpisode(args);
+            }
+        } catch (IOException e) {
+            sendUnexpectedError(e);
+        }
+    }
+
+    @Override
+    public void called(String args) {
+        if (args.equals("x")) {
+            reply("Section closed.");
+            dispose();
+            return;
+        }
+
+        switch (state) {
+            case ENTERED_QUERY, SELECTED_SHOW -> reply("Please wait until the results are found. Exit the section with 'x'");
+            default -> nextStep(args);
+        }
+    }
+
+    private void searchShow(String query) {
         try {
             List<String> shows = request.fetchShows(query);
             if (shows.isEmpty()) {
@@ -62,38 +91,7 @@ public class SearchSection extends Section {
             sendUnexpectedError(e);
         }
         state = SearchState.RECEIVED_SHOW_LIST;
-
         Storage.addSearch(request.getShowName());
-
-        //SECTION TIMEOUT
-        //is safe because listeners can be removed multiple times
-        final Timer t = new Timer();
-        t.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                dispose();
-                t.cancel();
-            }
-        }, TIMEOUT);
-    }
-
-    @Override
-    public void called(String args) {
-        if (args.equals("x")) {
-            reply("Section closed.");
-            dispose();
-            return;
-        }
-
-        try {
-            switch (state) {
-                case ENTERED_QUERY, SELECTED_SHOW -> reply("Please wait until the results are found. Exit the section with 'x'");
-                case RECEIVED_SHOW_LIST -> selectShow(args);
-                case RECEIVED_EPISODE_LIST -> selectEpisode(args);
-            }
-        } catch (IOException e) {
-            sendUnexpectedError(e);
-        }
     }
 
 
@@ -159,7 +157,7 @@ public class SearchSection extends Section {
             if ((sb.length() > 800 || lines > MAX_SHOW_LINES) && i < shows.size() - 1) { //pgae is full; create a new page but only if its not the last show
                 sb.append("```"); //close
                 embeds.add(Config.getDefaultEmbed()
-                        .addField("Shows", sb.toString(), false)
+                        .addField("Enter the number of the show.", sb.toString(), false)
                         .build());
                 sb = new StringBuilder();
                 sb.append("```"); //open

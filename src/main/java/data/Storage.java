@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 public class Storage {
 
-    private static final String SEARCHES_PATH = "searches.s";
+    private static final String SEARCHES_PATH = "searches.properties";
 
     private static Properties searches;
 

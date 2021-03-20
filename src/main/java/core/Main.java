@@ -35,7 +35,6 @@ public class Main {
         builder.setDisabledIntents(GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MEMBERS);
         builder.setMemberCachePolicy(MemberCachePolicy.NONE);
         builder.disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.ROLE_TAGS, CacheFlag.MEMBER_OVERRIDES, CacheFlag.EMOTE, CacheFlag.VOICE_STATE);
-        builder.setShardsTotal(1);
         builder.addEventListeners(
                 new StartUpListener(),
                 new ChannelMessageListener(),
@@ -45,9 +44,15 @@ public class Main {
                 new ServerJoinListener()
         );
 
+        //get the shard amount from the server count
+        //each shard gets 1000 servers
+        int shardCount = Config.readGuildCountFile() / 1000 + 1;
+        System.out.println("Starting Touka with " + shardCount + " shards.");
+        builder.setShardsTotal(shardCount);
+
         ShardManager sm = builder.build();
         Config.setSm(sm);
-        Config.refreshServerCount();
+        Config.refreshGuildCount();
         Storage.init();
         setupCommands();
     }

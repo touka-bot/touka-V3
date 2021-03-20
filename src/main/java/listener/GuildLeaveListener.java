@@ -8,6 +8,6 @@ import org.jetbrains.annotations.NotNull;
 public class GuildLeaveListener extends ListenerAdapter {
     @Override
     public void onGuildLeave(@NotNull GuildLeaveEvent event) {
-        Config.refreshServerCount();
+        Config.refreshGuildCount();
     }
 }
