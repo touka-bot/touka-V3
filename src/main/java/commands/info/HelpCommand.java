@@ -4,7 +4,6 @@ import core.command.Command;
 import core.command.CommandHandler;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 
-//todo the help command is generated automatically. If you want to change the look of it go to the CommandHandler
 public class HelpCommand extends Command {
     public HelpCommand() {
         super("help", "Shows this message", "help invite", "(command name)");

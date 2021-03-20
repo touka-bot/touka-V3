@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 /**
@@ -16,6 +17,7 @@ public class CommandHandler {
     public static final int MAX_HELP_PAGE_LENGTH = 10;
 
     private static final Map<String, Command> commands = new HashMap<>();
+    private static final HashSet<Command> commandsForHelp = new HashSet<>();
     private static final Map<String, Command> hiddenCommands = new HashMap<>();
 
     private static final CommandParser parser = new CommandParser();
@@ -32,11 +34,13 @@ public class CommandHandler {
             hiddenCommands.put(key, cmd);
         } else {
             commands.put(key, cmd);
+            commandsForHelp.add(cmd);
         }
     }
 
     public static void addCommand(String key, Command cmd) {
         commands.put(key, cmd);
+        commandsForHelp.add(cmd);
     }
 
     /**
@@ -57,7 +61,7 @@ public class CommandHandler {
     }
 
     public static int commandAmount() {
-        return commands.size();
+        return commandsForHelp.size();
     }
 
     /**
@@ -68,7 +72,7 @@ public class CommandHandler {
     public static EmbedBuilder getHelpList() {
         EmbedBuilder builder = Config.getDefaultEmbed();
         builder.setTitle("Touka's Commands");
-        for (Command s : commands.values()) {
+        for (Command s : commandsForHelp) {
             builder.addField(Config.PREFIX + s.getName(), "`" + s.getDescription() + "`", false);
         }
         return builder;
@@ -80,14 +84,14 @@ public class CommandHandler {
      */
     public static MessageEmbed[] getHelpLists() {
 
-        int length = commands.size();
+        int length = commandsForHelp.size();
         int pages = length / MAX_HELP_PAGE_LENGTH + 1;
         EmbedBuilder[] builders = new EmbedBuilder[pages];
 
 
         int i = 0, j = 0;
         EmbedBuilder builder = null;
-        for (Command value : commands.values()) {
+        for (Command value : commandsForHelp) {
             if (i % MAX_HELP_PAGE_LENGTH == 0) {
                 builder = Config.getDefaultEmbed();
                 builder.setTitle("Touka help");
