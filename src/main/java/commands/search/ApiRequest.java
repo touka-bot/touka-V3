@@ -110,4 +110,9 @@ public class ApiRequest {
     }
 
 
+    public void dump() {
+        System.err.println("Query: " + query);
+        System.err.println("Received shows: " + shows);
+        System.err.println("Selected show: " + showIndex);
+    }
 }
