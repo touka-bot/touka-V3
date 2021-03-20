@@ -38,8 +38,6 @@ public class ApiRequest {
         String route = String.format("%s/%s/%d", provider, query, showIndex);
         this.showIndex = showIndex;
 
-        System.out.println("Fetching episodes...");
-
         return jsonArrayToList(request(route));
     }
 
