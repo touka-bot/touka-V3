@@ -108,7 +108,7 @@ public class SearchSection extends Section {
 
     private void selectEpisode(String args) {
         try {
-            if (args.trim().matches("\\d+ *- *\\d+")) {
+            if (args.trim().matches("\\d+ *- *\\d+")) { // x-y
                 String[] split = args.trim().split(" *- *");
                 int from = Integer.parseInt(split[0]); //inclusive
                 int to = Integer.parseInt(split[1]); //inclusive
@@ -138,48 +138,50 @@ public class SearchSection extends Section {
 
     private void sendShows(List<String> shows) {
 
-        List<MessageEmbed> embeds = new ArrayList<>();
-        StringBuilder sb = new StringBuilder();
-
-        int lines = 0;
-
-        sb.append("```");
-        for (int i = 0; i < shows.size(); i++) {
-            sb.append(i).append(" ").append(shows.get(i).replaceAll(URL_FILTER_PATTERN, "")).append("\n");
-            lines++;
-
-            if (sb.length() > 800 || lines > MAX_SHOW_LINES) {
-                sb.append("```");
-                embeds.add(Config.getDefaultEmbed()
-                        .addField("Shows", sb.toString(), false)
-                        .build());
-                sb = new StringBuilder();
-                sb.append("```");
-                lines = 0;
-            }
-        }
-
-        sb.append("```");
-
-        embeds.add(Config.getDefaultEmbed()
-                .addField("Shows", sb.toString(), false)
-                .build());
+        List<MessageEmbed> embeds = createShowEmbeds(shows);
 
         if (embeds.size() > 1) {
             reply(60000, embeds.toArray(new MessageEmbed[0]));
         } else {
             reply(embeds.get(0));
         }
+    }
 
+    private List<MessageEmbed> createShowEmbeds(List<String> shows) {
+        StringBuilder sb = new StringBuilder();
+        List<MessageEmbed> embeds = new ArrayList<>();
 
+        int lines = 0;
+        sb.append("```"); //open
+        for (int i = 0; i < shows.size(); i++) {
+            sb.append(i).append(" ").append(shows.get(i).replaceAll(URL_FILTER_PATTERN, "")).append("\n");
+            lines++;
+
+            if ((sb.length() > 800 || lines > MAX_SHOW_LINES ) && i < shows.size() - 1) { //pgae is full; create a new page but only if its not the last show
+                sb.append("```"); //close
+                embeds.add(Config.getDefaultEmbed()
+                        .addField("Shows", sb.toString(), false)
+                        .build());
+                sb = new StringBuilder();
+                sb.append("```"); //open
+                lines = 0;
+            }
+        }
+
+        sb.append("```"); //close
+        embeds.add(Config.getDefaultEmbed()
+                .addField("Shows", sb.toString(), false)
+                .build());
+
+        return embeds;
     }
 
     private void sendEpisodes(int episodeAmount) {
-        String s = "This Anime has " + episodeAmount + "  episodes!\n" +
+        String reply = "This Anime has " + episodeAmount + "  episodes!\n" +
                 "Type a Number from 1 to " + episodeAmount + "  to select an episode. :ringed_planet:\n" +
                 "Tip: To select multiple episodes, simply type the range of episodes you want to watch! e.g. 4 - 10";
 
-        reply(s);
+        reply(reply);
     }
 
     private void sendEpisode(String link, int episodeIndex) {
@@ -197,23 +199,25 @@ public class SearchSection extends Section {
             builder.addField("Downloads", "[Vote for Downloads](https://top.gg/bot/783720725848129566/vote)", false);
         }
 
-        String webViewLink;
-        try {
-             webViewLink = String.format("https://4c3711.xyz/touka/watch?url=%s&title=%s&ep=%s",
-                    Base64.getUrlEncoder().encodeToString(link.getBytes(StandardCharsets.UTF_8)),
-                    URLEncoder.encode(request.getShowName(), StandardCharsets.UTF_8.toString()),
-                    episodeIndex);
-
-        } catch (UnsupportedEncodingException e) {
-            sendUnexpectedError(e);
-            return;
-        }
+        String webViewLink = formatWebViewLink(link, episodeIndex);
 
         builder.addField("Web View", "[Web View](" + webViewLink + ")", false)
                 .setFooter("'Direct View' might not always work. In that case use the Web View.");
 
         reply(builder.build());
         dispose();
+    }
+
+    private String formatWebViewLink(String link, int episodeIndex) {
+        try {
+            return String.format("https://4c3711.xyz/touka/watch?url=%s&title=%s&ep=%s",
+                    Base64.getUrlEncoder().encodeToString(link.getBytes(StandardCharsets.UTF_8)),
+                    URLEncoder.encode(request.getShowName(), StandardCharsets.UTF_8.toString()),
+                    episodeIndex);
+        } catch (UnsupportedEncodingException e) {
+            sendUnexpectedError(e);
+            return "";
+        }
     }
 
     private void sendExpectedError(Exception e) {
