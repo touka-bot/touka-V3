@@ -113,6 +113,11 @@ public class SearchSection extends Section {
                 int from = Integer.parseInt(split[0]); //inclusive
                 int to = Integer.parseInt(split[1]); //inclusive
 
+                if (to - from > 12) {
+                    reply("Please do not request more than 12 episodes at once.");
+                    return;
+                }
+
                 for (int i = from; i < to; i++) {
                     sendEpisode(request.fetchEpisode(i), i);
                 }
@@ -204,7 +209,6 @@ public class SearchSection extends Section {
             return;
         }
 
-
         builder.addField("Web View", "[Web View](" + webViewLink + ")", false)
                 .setFooter("'Direct View' might not always work. In that case use the Web View.");
 
@@ -220,6 +224,7 @@ public class SearchSection extends Section {
         reply("An unexpected error occurred and has been reported to the Touka dev team. Please try again.");
         dispose();
         e.printStackTrace();
+        request.dump();
     }
 
 
