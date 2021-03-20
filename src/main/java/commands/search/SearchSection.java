@@ -119,7 +119,7 @@ public class SearchSection extends Section {
                     return;
                 }
 
-                for (int i = from; i < to; i++) {
+                for (int i = from; i <= to; i++) {
                     sendEpisode(request.fetchEpisode(i), i);
                 }
 

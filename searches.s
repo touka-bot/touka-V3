@@ -1,5 +1,5 @@
 #
-#Sat Mar 20 13:47:22 CET 2021
+#Sat Mar 20 14:05:20 CET 2021
 kono-subarashii-sekai-ni-shukufuku-wo-kurenai-densetsu=2
 dragon-ball-z-dub=13
 koi-to-producer-evolxlove=1
@@ -290,7 +290,7 @@ charlotte=8
 pokemon-the-origin=3
 boku-no-kanojo-ga-majimesugiru-sho-bitch-na-ken=1
 assassination-classroom-2-dubbed=1
-hunter\ x\ hunter\ 2011=4
+hunter\ x\ hunter\ 2011=6
 gegege-no-kitarou-2018=1
 vinland-saga=17
 no-game-no-life=16
