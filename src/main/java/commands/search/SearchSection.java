@@ -30,7 +30,7 @@ public class SearchSection extends Section {
 
     private CompletionStage<Boolean> dplRequest;
     private SearchState state;
-    private ApiRequest request;
+    private final ApiRequest request;
 
 
     public SearchSection(long textChannelID, long userID, String query, MessageReceivedEvent event) {
