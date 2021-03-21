@@ -6,70 +6,54 @@ import cofig.Config;
  * The base command class. Every command should extend this class.
  */
 public abstract class Command extends MessageSender{
-    private final String name;
-    private final String description;
-    private final String exampleUsage;
-    private final String arguments;
-    private final String detailDescription;
-    private final boolean hidden;
-    private final CommandParser parser = new CommandParser();
+    private String name;
+    private String description;
+    private String exampleUsage;
+    private String arguments;
+    private String detailDescription;
 
-
-    /**
-     * New command
-     * @param name command name
-     * @param description quick description
-     * @param exampleUsage example usage without the prefix
-     * @param arguments all arguments (() -> optional. <> -> required
-     * @param detailDescription a detailed description
-     */
-    public Command(String name, String description, String exampleUsage, String arguments, String detailDescription) {
-        this.name = name;
-        this.description = description;
-        this.exampleUsage = exampleUsage;
-        this.arguments = arguments;
-        this.detailDescription = detailDescription;
-        this.hidden = false;
-        CommandHandler.addCommand(name, this, false);
-    }
+    //Array of all command aliases
+    private String[] aliases;
+    //whether the command should be displayed on the help page
+    //note: this does not make the command restricted in any way
+    private boolean hidden;
 
     /**
-     * New command
-     * @param name command name
-     * @param description quick description
-     * @param exampleUsage example usage without the prefix
-     * @param arguments all arguments (() -> optional. <> -> required
-     */
-    public Command(String name, String description, String exampleUsage, String arguments){
-        this(name, description, exampleUsage, arguments, "");
-    }
-
-    /**
-     * New command
-     * @param name command name
-     * @param description quick description
-     */
-    public Command(String name, String description) {
-        this(name, description, name, "", "");
-    }
-
-    /**
-     * Hidden command
+     * Create a new command
      * @param name name
-     * @param hidden should always be true
      */
-    public Command(String name, boolean hidden) {
+    public Command(String name) {
         this.name = name;
         this.description = "";
         this.exampleUsage = "";
         this.arguments = "";
         this.detailDescription = "";
-        this.hidden = hidden;
-        CommandHandler.addCommand(name, this, hidden);
+        CommandHandler.addCommand(name, this);
     }
 
     protected void setAlias(String alias) {
-        CommandHandler.addCommand(alias, this, hidden);
+        CommandHandler.addAlias(alias, this);
+    }
+
+    protected void setDescription(String description) {
+        this.description = description;
+    }
+
+    protected void setExampleUsage(String exampleUsage) {
+        this.exampleUsage = exampleUsage;
+    }
+
+    protected void setArguments(String arguments) {
+        this.arguments = arguments;
+    }
+
+    protected void setDetailDescription(String detailDescription) {
+        this.detailDescription = detailDescription;
+    }
+
+    protected void setHidden() {
+        this.hidden = true;
+        CommandHandler.hide(this);
     }
 
     public String getName() {
@@ -81,7 +65,7 @@ public abstract class Command extends MessageSender{
     }
 
     public String getExampleUsage() {
-        return Config.PREFIX + exampleUsage;
+        return exampleUsage;
     }
 
     public String getArguments() {
@@ -90,5 +74,9 @@ public abstract class Command extends MessageSender{
 
     public String getDetailDescription() {
         return detailDescription;
+    }
+
+    public boolean isHidden() {
+        return hidden;
     }
 }

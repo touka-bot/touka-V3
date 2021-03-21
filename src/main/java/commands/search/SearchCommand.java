@@ -4,7 +4,10 @@ import core.command.Command;
 
 public class SearchCommand extends Command {
     public SearchCommand() {
-        super("search", "Search for an anime!", "search hunter x hunter", "<animename>");
+        super("search");
+        setDescription("Search for an anime!");
+        setExampleUsage("search hunter x hunter");
+        setArguments("<animename>");
         setAlias("s");
     }
 

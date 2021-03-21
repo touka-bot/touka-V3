@@ -11,7 +11,8 @@ import java.util.Locale;
 public class InfoCommand extends Command {
 
     public InfoCommand() {
-        super("info", "Info about me!");
+        super("info");
+        setDescription("Info about me!");
     }
 
     @Override

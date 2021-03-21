@@ -7,7 +7,8 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 public class InviteCommand extends Command {
 
     public InviteCommand() {
-        super("invite", "Get the invite link for this bot");
+        super("invite");
+        setDescription("Get the invite link for this bot");
     }
 
     @Override

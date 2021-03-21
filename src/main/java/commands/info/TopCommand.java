@@ -10,7 +10,8 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 public class TopCommand extends Command {
 
     public TopCommand() {
-        super("top", "Get a list of the top searches");
+        super("top");
+        setDescription("Get a list of the top searches");
     }
 
     @Override

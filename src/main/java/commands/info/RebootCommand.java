@@ -4,7 +4,8 @@ import core.command.Command;
 
 public class RebootCommand extends Command {
     public RebootCommand() {
-        super("reboot", true);
+        super("reboot");
+        setHidden();
     }
 
     @Override

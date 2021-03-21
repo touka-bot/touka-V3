@@ -67,9 +67,16 @@ public abstract class MessageSender {
      * @param embeds The embeds
      */
     protected void reply(MessageEmbed... embeds) {
-        if (!embeds[0].isEmpty()) {
+        if (embeds[0].isEmpty()) {
+            return;
+        }
+
+        if (embeds.length == 1) {
+            reply(embeds[0]);
+        } else {
             new MultiPageEmbed(event, embeds);
         }
+
     }
 
     /**
@@ -78,7 +85,7 @@ public abstract class MessageSender {
      * Will not send empty Embeds
      *
      * @param timeout The timeout in milliseconds
-     * @param embeds The embeds
+     * @param embeds  The embeds
      */
     protected void reply(long timeout, MessageEmbed... embeds) {
         if (!embeds[0].isEmpty()) {
