@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.sharding.ShardManager;
+import org.discordbots.api.client.DiscordBotListAPI;
 
 import java.awt.*;
 import java.io.*;
@@ -34,10 +35,17 @@ public class Config {
     }
 
     public static void refreshGuildCount() {
+        DiscordBotListAPI api = new DiscordBotListAPI.Builder()
+                .token(Config.DBL_TOKEN)
+                .botId("783720725848129566")
+                .build();
+
          guildCount = sm.getShards().stream()
                 .map(JDA::getGuilds)
                 .mapToInt(List::size)
                 .sum();
+
+         api.setStats(guildCount);
 
          writeGuildCountFile();
     }
