@@ -27,7 +27,7 @@ public class Main {
 
     public static void main(String[] args) throws LoginException, IOException {
         DefaultShardManagerBuilder builder =
-                DefaultShardManagerBuilder.createDefault("ODE5MjM3MTU0OTc3ODczOTMw.YEjsDg.n20cgALF7DBbrp1-0RnA3Kg_8ok");
+                DefaultShardManagerBuilder.createDefault("NzgzNzIwNzI1ODQ4MTI5NTY2.X8e2zQ.nbq7lDRxEK9eNebvwY6yfV6qLGk");
         builder.setCompression(Compression.ZLIB);
         builder.setStatus(OnlineStatus.ONLINE);
         builder.setAutoReconnect(true);
