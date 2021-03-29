@@ -8,6 +8,7 @@ import core.reactions.ReactionEventListener;
 import core.sections.ChannelMessageListener;
 import data.Storage;
 import listener.GuildLeaveListener;
+import listener.PingListener;
 import listener.ServerJoinListener;
 import listener.StartUpListener;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -41,7 +42,8 @@ public class Main {
                 new CommandListener(),
                 new ReactionEventListener(),
                 new GuildLeaveListener(),
-                new ServerJoinListener()
+                new ServerJoinListener(),
+                new PingListener()
         );
 
         //get the shard amount from the server count
@@ -52,7 +54,7 @@ public class Main {
 
         ShardManager sm = builder.build();
         Config.setSm(sm);
-        Config.refreshGuildCount();
+        Config.init();
         Storage.init();
         setupCommands();
     }

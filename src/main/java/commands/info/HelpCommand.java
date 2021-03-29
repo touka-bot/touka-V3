@@ -15,7 +15,7 @@ public class HelpCommand extends Command {
     @Override
     public void called(String args) {
         if (args.length() == 0) {
-            reply(CommandHandler.getHelpList());
+            reply(CommandHandler.getHelp());
         } else {
             MessageEmbed help = CommandHandler.getCommandHelp(args);
             if (help != null) {

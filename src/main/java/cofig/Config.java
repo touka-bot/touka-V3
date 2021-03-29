@@ -2,7 +2,6 @@ package cofig;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import org.discordbots.api.client.DiscordBotListAPI;
 
@@ -16,6 +15,7 @@ public class Config {
     public static final Color DEFAULT_COLOR = new Color(40, 38, 38);
     public static final String VERSION = "3.0.0";
     public static final String DBL_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc4MzcyMDcyNTg0ODEyOTU2NiIsImJvdCI6dHJ1ZSwiaWF0IjoxNjEwOTU4NjM0fQ.tvBj4mWyIKOpYimt6hCvShwlUm7vX63Zz0evPszNFY8";
+    public static long thisId = 0;
     private static ShardManager sm;
 
     private static final String GUILD_COUNT_FILE_NAME = "guild_count.txt";
@@ -32,6 +32,11 @@ public class Config {
         builder.setColor(Config.DEFAULT_COLOR).
                 setThumbnail(sm.getShards().get(0).getSelfUser().getAvatarUrl());
         return builder;
+    }
+
+    public static void init() {
+        refreshGuildCount();
+        thisId = sm.getShards().get(0).getSelfUser().getIdLong();
     }
 
     public static void refreshGuildCount() {

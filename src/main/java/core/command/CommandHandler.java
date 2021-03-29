@@ -67,38 +67,26 @@ public class CommandHandler {
         }
     }
 
-    /**
-     * Get a list of all commands, returns many pages if there are lots of commands
-     *
-     * @return The pages
-     */
-    public static MessageEmbed[] getHelpList() {
+    public static MessageEmbed getHelp() {
 
-        List<MessageEmbed> embeds = new ArrayList<>();
+        EmbedBuilder builder = Config.getDefaultEmbed();
 
-        EmbedBuilder builder = Config.getDefaultEmbed()
-                .setTitle("Touka's Commands");
+        String pf = Config.PREFIX;
+        builder.setTitle("Touka bot help")
+                .addField("Use '" + pf + "search animename' to search a show!", "`" + pf + "search hunter x hunter`\n" +
+                        "Then wait and type the number of the show: `4`\n" +
+                        "Then wait again and select and episode: `1`\n" +
+                        "Tip: you can also select a range: `1-10`", false)
+                .addField("All commands:", "" +
+                        "`" + pf + "search`: lets you search for shows\n" +
+                        "`" + pf + "help`:   shows the help page\n" +
+                        "`" + pf + "info`:   shows general bot info\n" +
+                        "`" + pf + "invite`: lets you invite the bot\n" +
+                        "`" + pf + "top`:    shows the top searched shows", false)
+                .addField("", "For more info on a command, enter " + pf + " `help commandname`", false);
 
-        int length = 0;
-        for (Command cmd : uniqueVisibleCommands) {
-            if (length == MAX_HELP_PAGE_LENGTH) {
-                embeds.add(builder.build());
-                builder = Config.getDefaultEmbed()
-                        .setTitle("Touka's Commands");
-            }
 
-            builder.addField(Config.PREFIX + cmd.getName(), "`" + cmd.getDescription() + "`", false);
-            length++;
-        }
-        if (builder.getFields().size() != 0) {
-            embeds.add(builder.build());
-        }
-
-        MessageEmbed[] array = new MessageEmbed[embeds.size()];
-        for (int i = 0; i < embeds.size(); i++) {
-            array[i] = embeds.get(i);
-        }
-        return array;
+        return builder.build();
     }
 
     /**
