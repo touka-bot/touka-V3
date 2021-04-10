@@ -190,26 +190,28 @@ public class SearchSection extends Section {
 
         boolean hasVoted = dplRequest.toCompletableFuture().join();
 
+
+
         if (hasVoted) {
-            builder.addField("Downloads", "[[Server 1]](" + link + ")", false);
+            String vidUrl = request.getShowByKey(link);
+            String sessionLink = request.getW2GSession(vidUrl);
+            builder.addField("Downloads", "[[Server 1]](" + vidUrl + ")", false);
+            builder.addField("Watch2Gether", "[Watch with friends](" + sessionLink + ")", false);
         } else {
-            builder.addField("Downloads", "[Vote for Downloads](https://top.gg/bot/783720725848129566/vote)", false);
+            builder.addField("Vote required", "[Vote here](https://top.gg/bot/783720725848129566/vote) to get Downloads & Watch2Gether Sessions in the next search!", false);
         }
 
         String webViewLink = formatWebViewLink(link, episodeIndex);
         String thumbnail = request.fetchThumbnail();
 
-        builder.addField("Web View", "[Web View](" + webViewLink + ")", false)
+        builder.addField("Web View", "[touka.tv](" + webViewLink + ")", false)
                 .setThumbnail(thumbnail);
 
         reply(builder.build());
     }
 
     private String formatWebViewLink(String link, int episodeIndex) throws UnsupportedEncodingException {
-        return String.format("https://4c3711.xyz/touka/watch?url=%s&title=%s&ep=%s",
-                Base64.getUrlEncoder().encodeToString(link.getBytes(StandardCharsets.UTF_8)),
-                URLEncoder.encode(request.getShowName(), StandardCharsets.UTF_8.toString()),
-                episodeIndex);
+        return "https://touka.tv/watch.php?v=" + link;
     }
 
     private void sendExpectedError(Exception e) {

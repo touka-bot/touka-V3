@@ -27,12 +27,14 @@ public class Main {
 
     public static void main(String[] args) throws LoginException, IOException {
         DefaultShardManagerBuilder builder =
+                //NzgzNzY5OTgyNjMwMzYzMTk3.X8fkrQ.LvgAphYEinHyPyQNz3mgYbPoxF0
+                //NzgzNzIwNzI1ODQ4MTI5NTY2.X8e2zQ.nbq7lDRxEK9eNebvwY6yfV6qLGk
                 DefaultShardManagerBuilder.createDefault("NzgzNzIwNzI1ODQ4MTI5NTY2.X8e2zQ.nbq7lDRxEK9eNebvwY6yfV6qLGk");
         builder.setCompression(Compression.ZLIB);
         builder.setStatus(OnlineStatus.ONLINE);
         builder.setAutoReconnect(true);
 
-        builder.setActivity(Activity.listening(Config.PREFIX + "help"));
+        builder.setActivity(Activity.listening(Config.PREFIX + "help | touka.tv"));
         builder.setDisabledIntents(GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MEMBERS);
         builder.setMemberCachePolicy(MemberCachePolicy.NONE);
         builder.disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.ROLE_TAGS, CacheFlag.MEMBER_OVERRIDES, CacheFlag.EMOTE, CacheFlag.VOICE_STATE);

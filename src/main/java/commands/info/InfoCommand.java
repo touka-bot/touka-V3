@@ -29,6 +29,7 @@ public class InfoCommand extends Command {
                 .addField("Discord Server", "[Join!](https://discord.gg/tvDXKZSzqd)", false)
                 .addField("Contribute to the Project", "[GitHub Repo](https://github.com/touka-bot)",true)
                 .addField("top.gg", "[top.gg/touka](https://top.gg/bot/783720725848129566)", true)
+                .addField("Website", "https://touka.tv", true)
                 .setFooter("Version v" + Config.VERSION).build();
         reply(embed);
     }

@@ -10,12 +10,13 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class ApiRequest {
 
-    private static final String BASE_URL = "http://4c3711.xyz:3000/touka/api/v2/getanime/";
+    private static final String BASE_URL = "http://touka.tv:3000/touka/api/v2/getanime/";
     private final String provider = "animekisa";
 
     private List<String> shows;
@@ -62,6 +63,15 @@ public class ApiRequest {
 
     public String getShowName() {
         return replaceLink(shows.get(showIndex));
+    }
+
+    public String getShowByKey(String key) throws IOException {
+        return readContentFromUrl("http://touka.tv:3000/touka/api/v2/keys/get/" + key);
+    }
+
+    public String getW2GSession(String url) throws IOException {
+        String url64 = Base64.getEncoder().encodeToString(url.getBytes());
+        return readContentFromUrl("http://touka.tv:3000/touka/api/v2/w2g/getsession/" + url64);
     }
 
     private String replaceLink(String s) {

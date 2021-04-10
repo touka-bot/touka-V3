@@ -13,7 +13,7 @@ public class Config {
 
     public static final String PREFIX = ">";
     public static final Color DEFAULT_COLOR = new Color(40, 38, 38);
-    public static final String VERSION = "3.0.1";
+    public static final String VERSION = "3.1.1";
     public static final String DBL_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc4MzcyMDcyNTg0ODEyOTU2NiIsImJvdCI6dHJ1ZSwiaWF0IjoxNjEwOTU4NjM0fQ.tvBj4mWyIKOpYimt6hCvShwlUm7vX63Zz0evPszNFY8";
     public static long thisId = 0;
     private static ShardManager sm;
