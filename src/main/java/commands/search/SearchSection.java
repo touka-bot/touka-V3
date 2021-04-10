@@ -9,10 +9,9 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.discordbots.api.client.DiscordBotListAPI;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.concurrent.CompletionStage;
 
 public class SearchSection extends Section {
@@ -83,7 +82,6 @@ public class SearchSection extends Section {
             if (shows.isEmpty()) {
                 reply("No shows found.");
                 dispose();
-                state = SearchState.ERROR;
                 return;
             }
             sendShows(shows);
@@ -98,10 +96,14 @@ public class SearchSection extends Section {
     private void selectShow(String args) throws IOException {
         try {
             int showIndex = Integer.parseInt(args);
+            if (showIndex >= request.getShows().size()) {
+                sendExpectedError();
+                return;
+            }
             sendEpisodes(request.fetchEpisodes(showIndex).size());
             state = SearchState.RECEIVED_EPISODE_LIST;
         } catch (NumberFormatException e) {
-            sendExpectedError(e);
+            sendExpectedError();
         }
     }
 
@@ -123,13 +125,12 @@ public class SearchSection extends Section {
 
             } else {
                 int episode = Integer.parseInt(args.trim());
-
                 sendEpisode(request.fetchEpisode(episode), episode);
             }
 
             dispose();
         } catch (NumberFormatException e) {
-            sendExpectedError(e);
+            sendExpectedError();
         }
     }
 
@@ -190,8 +191,6 @@ public class SearchSection extends Section {
 
         boolean hasVoted = dplRequest.toCompletableFuture().join();
 
-
-
         if (hasVoted) {
             String vidUrl = request.getShowByKey(link);
             String sessionLink = request.getW2GSession(vidUrl);
@@ -201,7 +200,7 @@ public class SearchSection extends Section {
             builder.addField("Vote required", "[Vote here](https://top.gg/bot/783720725848129566/vote) to get Downloads & Watch2Gether Sessions in the next search!", false);
         }
 
-        String webViewLink = formatWebViewLink(link, episodeIndex);
+        String webViewLink = formatWebViewLink(link);
         String thumbnail = request.fetchThumbnail();
 
         builder.addField("Web View", "[touka.tv](" + webViewLink + ")", false)
@@ -210,11 +209,11 @@ public class SearchSection extends Section {
         reply(builder.build());
     }
 
-    private String formatWebViewLink(String link, int episodeIndex) throws UnsupportedEncodingException {
+    private String formatWebViewLink(String link) {
         return "https://touka.tv/watch.php?v=" + link;
     }
 
-    private void sendExpectedError(Exception e) {
+    private void sendExpectedError() {
         reply("Invalid input, please try again. Exit the section with 'x'");
     }
 
@@ -228,10 +227,13 @@ public class SearchSection extends Section {
 
     @Override
     protected void dispose() {
-        if (Math.random() > 0.8) {
-            reply(getToolTip());
+        if (state != SearchState.DISPOSED) {
+            if (Math.random() > 0.8) {
+                reply(getToolTip());
+            }
+            state = SearchState.DISPOSED;
+            super.dispose();
         }
-        super.dispose();
     }
 
     public static String getToolTip() {
@@ -246,5 +248,5 @@ public class SearchSection extends Section {
 }
 
 enum SearchState {
-    ENTERED_QUERY, RECEIVED_SHOW_LIST, SELECTED_SHOW, RECEIVED_EPISODE_LIST, ERROR
+    ENTERED_QUERY, RECEIVED_SHOW_LIST, SELECTED_SHOW, RECEIVED_EPISODE_LIST, DISPOSED
 }

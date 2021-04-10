@@ -16,7 +16,8 @@ import java.util.stream.Collectors;
 
 public class ApiRequest {
 
-    private static final String BASE_URL = "http://touka.tv:3000/touka/api/v2/getanime/";
+    private static final String BASE_URL = "http://touka.tv:3000/touka/api/v2/";
+    private static final String GET_ANIME_URL = BASE_URL + "getanime/";
     private final String provider = "animekisa";
 
     private List<String> shows;
@@ -66,12 +67,12 @@ public class ApiRequest {
     }
 
     public String getShowByKey(String key) throws IOException {
-        return readContentFromUrl("http://touka.tv:3000/touka/api/v2/keys/get/" + key);
+        return readContentFromUrl(BASE_URL + "keys/get/" + key);
     }
 
     public String getW2GSession(String url) throws IOException {
         String url64 = Base64.getEncoder().encodeToString(url.getBytes());
-        return readContentFromUrl("http://touka.tv:3000/touka/api/v2/w2g/getsession/" + url64);
+        return readContentFromUrl(BASE_URL + "w2g/getsession/" + url64);
     }
 
     private String replaceLink(String s) {
@@ -82,11 +83,11 @@ public class ApiRequest {
 
 
     private JSONArray request(String route) throws IOException {
-        return readJsonFromUrl(BASE_URL + route);
+        return readJsonFromUrl(GET_ANIME_URL + route);
     }
 
     private String requestSingle(String route) throws IOException {
-        return readContentFromUrl(BASE_URL + route);
+        return readContentFromUrl(GET_ANIME_URL + route);
     }
 
     private JSONArray readJsonFromUrl(String url) throws IOException {
@@ -118,6 +119,10 @@ public class ApiRequest {
         return arr.toList().stream()
                 .map(o -> (String) o)
                 .collect(Collectors.toList());
+    }
+
+    public List<String> getShows() {
+        return shows;
     }
 
     public void dump() {
