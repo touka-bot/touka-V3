@@ -26,7 +26,7 @@ public class InfoCommand extends Command {
                 .setDescription("Watch & Browse Anime Series & Movies without any Ads!")
                 .addField("Servers", nf.format(serverCount), true)
                 .addField("Searches", "" + nf.format(Storage.getSearchesCount()), true)
-                .addField("Discord Server", "[Join!](https://discord.gg/tvDXKZSzqd)", false)
+                .addField("Discord Server", "[Join!](https://join.touka.tv)", false)
                 .addField("Contribute to the Project", "[GitHub Repo](https://github.com/touka-bot)",true)
                 .addField("top.gg", "[top.gg/touka](https://top.gg/bot/783720725848129566)", true)
                 .addField("Website", "https://touka.tv", true)

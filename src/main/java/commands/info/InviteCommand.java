@@ -16,7 +16,7 @@ public class InviteCommand extends Command {
 
         MessageEmbed builder = Config.getDefaultEmbed()
                 .setTitle("Invite me!")
-                .setDescription("[Click here](https://discord.com/api/oauth2/authorize?client_id=783720725848129566&permissions=8192&scope=bot)").build();
+                .setDescription("[Click here](https://get.touka.tv)").build();
         reply(builder);
     }
 }

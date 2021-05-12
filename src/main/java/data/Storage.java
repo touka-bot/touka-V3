@@ -1,15 +1,23 @@
 package data;
 
+import com.google.gson.Gson;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Properties;
 import java.util.stream.Stream;
 
 public class Storage {
+
+    public static Advertisements[] advertisements;
 
     private static final String SEARCHES_PATH = "searches";
 
@@ -71,4 +79,10 @@ public class Storage {
             return Integer.compare(this.value, o.value);
         }
     }
+
+    public static void loadAds() throws IOException {
+        String json = Files.readString(Path.of("./ads.json"));
+        advertisements = new Gson().fromJson(json, Advertisements[].class);
+    }
+
 }

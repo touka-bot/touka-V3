@@ -2,6 +2,7 @@ package commands.search;
 
 import cofig.Config;
 import core.sections.Section;
+import data.Advertisements;
 import data.Storage;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -179,9 +180,6 @@ public class SearchSection extends Section {
                 "Type a Number from 1 to " + episodeAmount + "  to select an episode. :ringed_planet:\n" +
                 "Tip: To select multiple episodes, simply type the range of episodes you want to watch! e.g. 4 - 10";
 
-        var e = new NullPointerException("Out of pain");
-        sendUnexpectedError(e);
-
         reply(reply);
     }
 
@@ -233,7 +231,20 @@ public class SearchSection extends Section {
     protected void dispose() {
         if (state != SearchState.DISPOSED) {
             if (Math.random() > 0.8) {
-                reply(getToolTip());
+                String afterSearch = getToolTip();
+                if(!afterSearch.equals("<sendad>")) {
+                    reply(afterSearch);
+                }else {
+                    Advertisements[] ads = Storage.advertisements;
+                    Random r = new Random();
+                    int i = r.nextInt(ads.length - 1);
+                    reply(new EmbedBuilder()
+                            .setTitle("Sponsored Message")
+                            .setDescription(ads[i].description)
+                            .setImage(ads[i].image)
+                            .setFooter("If you want to advertise your own content, visit https://touka.tv/advertise")
+                            .build());
+                }
             }
             state = SearchState.DISPOSED;
             super.dispose();
@@ -241,11 +252,12 @@ public class SearchSection extends Section {
     }
 
     public static String getToolTip() {
-        int i = new Random().nextInt(4);
+        int i = new Random().nextInt(11);
         return switch (i) {
             case 0 -> "**Like this Bot?** Recommend it to your Friends: <https://bit.ly/36Dwbij> :sparkling_heart:";
             case 1 -> ":sparkling_heart: **Like this Bot?** Leave a review here:\nhttps://top.gg/bot/783720725848129566";
             case 2 -> ":sparkling_heart: Join our **Anime Community** here:\nhttps://discord.gg/tvDXKZSzqd";
+            case 4,5,6,7,8,9,10 -> "<sendad>";
             default -> ":sparkling_heart: **Like this Bot?** Vote for **Touka** here:\nhttps://top.gg/bot/783720725848129566";
         };
     }
