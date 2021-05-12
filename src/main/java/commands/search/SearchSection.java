@@ -237,7 +237,7 @@ public class SearchSection extends Section {
                 }else {
                     Advertisements[] ads = Storage.advertisements;
                     Random r = new Random();
-                    int i = r.nextInt(ads.length - 1);
+                    int i = r.nextInt(ads.length);
                     reply(new EmbedBuilder()
                             .setTitle("Sponsored Message")
                             .setDescription(ads[i].description)
