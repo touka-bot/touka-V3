@@ -125,9 +125,13 @@ public class ApiRequest {
         return shows;
     }
 
-    public void dump() {
+    void dump() {
         System.err.println("Query: " + query);
         System.err.println("Received shows: " + shows);
         System.err.println("Selected show: " + showIndex);
+    }
+
+    String getDump() {
+        return "Query: " + query + "\nSelected: ";
     }
 }

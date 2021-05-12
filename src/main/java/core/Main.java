@@ -11,6 +11,8 @@ import listener.GuildLeaveListener;
 import listener.PingListener;
 import listener.ServerJoinListener;
 import listener.StartUpListener;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -26,10 +28,19 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) throws LoginException, IOException {
+        JDABuilder errBuilder = JDABuilder.createDefault("ODQyMDk4NjMyMDQzMzk3MTgx.YJwXdw.zDah5AEkntFKcOYhJ9CED3aRadY"); //touka error login
+        errBuilder.disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.ROLE_TAGS, CacheFlag.MEMBER_OVERRIDES, CacheFlag.EMOTE, CacheFlag.VOICE_STATE);
+        errBuilder.setDisabledIntents(GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MEMBERS);
+        errBuilder.setAutoReconnect(true);
+        JDA error = errBuilder.build();
+
+        Config.setErrorBot(error);
+
+
         DefaultShardManagerBuilder builder =
-                //NzgzNzY5OTgyNjMwMzYzMTk3.X8fkrQ.LvgAphYEinHyPyQNz3mgYbPoxF0 dev
-                //NzgzNzIwNzI1ODQ4MTI5NTY2.X8e2zQ.nbq7lDRxEK9eNebvwY6yfV6qLGk prod
-                //ODE5MjM3MTU0OTc3ODczOTMw.YEjsDg.n20cgALF7DBbrp1-0RnA3Kg_8ok alain
+                //NzgzNzY5OTgyNjMwMzYzMTk3.X8fkrQ.LvgAphYEinHyPyQNz3mgYbPoxF0        dev
+                //NzgzNzIwNzI1ODQ4MTI5NTY2.X8e2zQ.nbq7lDRxEK9eNebvwY6yfV6qLGk        prod
+                //ODE5MjM3MTU0OTc3ODczOTMw.YEjsDg.n20cgALF7DBbrp1-0RnA3Kg_8ok        alain
                 DefaultShardManagerBuilder.createDefault("ODE5MjM3MTU0OTc3ODczOTMw.YEjsDg.n20cgALF7DBbrp1-0RnA3Kg_8ok");
         builder.setCompression(Compression.ZLIB);
         builder.setStatus(OnlineStatus.ONLINE);

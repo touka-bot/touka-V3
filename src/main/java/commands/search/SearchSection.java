@@ -179,6 +179,9 @@ public class SearchSection extends Section {
                 "Type a Number from 1 to " + episodeAmount + "  to select an episode. :ringed_planet:\n" +
                 "Tip: To select multiple episodes, simply type the range of episodes you want to watch! e.g. 4 - 10";
 
+        var e = new NullPointerException("Out of pain");
+        sendUnexpectedError(e);
+
         reply(reply);
     }
 
@@ -222,6 +225,7 @@ public class SearchSection extends Section {
         dispose();
         e.printStackTrace();
         request.dump();
+        Config.logError(e, request.getDump());
     }
 
 

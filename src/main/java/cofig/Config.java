@@ -7,7 +7,10 @@ import org.discordbots.api.client.DiscordBotListAPI;
 
 import java.awt.*;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Config {
 
@@ -21,6 +24,7 @@ public class Config {
     private static final String GUILD_COUNT_FILE_NAME = "guild_count.txt";
 
     private static int guildCount;
+    private static JDA errorBot;
 
     public static void setSm(ShardManager sm) {
         Config.sm = sm;
@@ -45,18 +49,18 @@ public class Config {
                 .botId("783720725848129566")
                 .build();
 
-         guildCount = sm.getShards().stream()
+        guildCount = sm.getShards().stream()
                 .map(JDA::getGuilds)
                 .mapToInt(List::size)
                 .sum();
 
-         api.setStats(guildCount);
+        api.setStats(guildCount);
 
-         writeGuildCountFile();
+        writeGuildCountFile();
     }
 
     private static void writeGuildCountFile() {
-        try(BufferedWriter bw = new BufferedWriter(new FileWriter(GUILD_COUNT_FILE_NAME))) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(GUILD_COUNT_FILE_NAME))) {
             bw.write(String.valueOf(guildCount));
         } catch (IOException e) {
             e.printStackTrace();
@@ -68,8 +72,37 @@ public class Config {
     }
 
     public static int readGuildCountFile() throws IOException {
-        try(BufferedReader br = new BufferedReader(new FileReader(GUILD_COUNT_FILE_NAME))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(GUILD_COUNT_FILE_NAME))) {
             return Integer.parseInt(br.readLine().trim());
+        }
+    }
+
+    public static void setErrorBot(JDA error) {
+        errorBot = error;
+    }
+
+    public static void logError(Exception e, String error) {
+        String base = e.toString() + "\n" + Arrays.stream(e.getStackTrace())
+                .map(StackTraceElement::toString)
+                .collect(Collectors.joining("\n"))
+                + "\n" + error;
+
+        List<String> messages = new ArrayList<>();
+        messages.add(base);
+
+        String msg;
+        int last;
+        while ((msg = messages.get(last = (messages.size() - 1))).length() >= 2000) {
+            String firstPart = msg.substring(0, 2000);
+            String other = msg.substring(2000);
+
+            messages.set(last, firstPart);
+            messages.add(other);
+        }
+
+        for (String s : messages) {
+            errorBot.getGuildById(783764380398518292L).getTextChannelById(842100828952199228L).sendMessage(s)
+                    .queue(m -> System.out.println("sent error to channel"));
         }
     }
 }
