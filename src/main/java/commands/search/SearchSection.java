@@ -235,15 +235,15 @@ public class SearchSection extends Section {
                 if(!afterSearch.equals("<sendad>")) {
                     reply(afterSearch);
                 }else {
-                    Advertisements[] ads = Storage.advertisements;
-                    Random r = new Random();
-                    int i = r.nextInt(ads.length);
-                    reply(new EmbedBuilder()
-                            .setTitle("Sponsored Message")
-                            .setDescription(ads[i].description)
-                            .setImage(ads[i].image)
-                            .setFooter("If you want to advertise your own content, visit https://touka.tv/advertise")
-                            .build());
+//                    Advertisements[] ads = Storage.advertisements;
+//                    Random r = new Random();
+//                    int i = r.nextInt(ads.length);
+//                    reply(new EmbedBuilder()
+//                            .setTitle("Sponsored Message")
+//                            .setDescription(ads[i].description)
+//                            .setImage(ads[i].image)
+//                            .setFooter("If you want to advertise your own content, visit https://touka.tv/advertise")
+//                            .build());
                 }
             }
             state = SearchState.DISPOSED;
