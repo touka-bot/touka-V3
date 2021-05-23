@@ -219,7 +219,7 @@ public class SearchSection extends Section {
     }
 
     private void sendUnexpectedError(Exception e) {
-        reply("An unexpected error occurred and has been reported to the Touka dev team. Please try again.");
+        reply("Sorry, we were unable to process your request successfully. Please try again at a later time!");
         dispose();
         e.printStackTrace();
         request.dump();

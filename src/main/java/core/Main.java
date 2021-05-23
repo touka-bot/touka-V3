@@ -6,6 +6,7 @@ import commands.search.SearchCommand;
 import core.command.CommandListener;
 import core.reactions.ReactionEventListener;
 import core.sections.ChannelMessageListener;
+import data.Premium;
 import data.Storage;
 import listener.GuildLeaveListener;
 import listener.PingListener;
@@ -28,6 +29,8 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) throws LoginException, IOException {
+        Premium.init();
+
         JDABuilder errBuilder = JDABuilder.createDefault("ODQyMDk4NjMyMDQzMzk3MTgx.YJwXdw.zDah5AEkntFKcOYhJ9CED3aRadY"); //touka error login
         errBuilder.disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.ROLE_TAGS, CacheFlag.MEMBER_OVERRIDES, CacheFlag.EMOTE, CacheFlag.VOICE_STATE);
         errBuilder.setDisabledIntents(GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MEMBERS);
