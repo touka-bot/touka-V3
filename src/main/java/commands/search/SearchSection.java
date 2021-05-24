@@ -81,7 +81,7 @@ public class SearchSection extends Section {
         try {
             List<String> shows = request.fetchShows(query);
             if (shows.isEmpty()) {
-                reply("No shows found.");
+                reply("No shows found.\n```\nTry these tips instead:\n1) Try the alternative japanese title\n2) Try using just one word```");
                 dispose();
                 return;
             }
