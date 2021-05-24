@@ -197,12 +197,12 @@ public class SearchSection extends Section {
         if (hasVoted) {
             String vidUrl = request.getShowByKey(link);
             String sessionLink = request.getW2GSession(vidUrl);
+//
+//            JSONObject body = new JSONObject();
+//            body.put("longUrl", vidUrl);
+//            String shortVidUrl = "https://s.touka.tv/" + new JSONObject(External.post("https://s.touka.tv/rest/v2/short-urls", body.toString())).getString("shortCode");
 
-            JSONObject body = new JSONObject();
-            body.put("longUrl", vidUrl);
-            String shortVidUrl = "https://s.touka.tv/" + new JSONObject(External.post("https://s.touka.tv/rest/v2/short-urls", body.toString())).getString("shortCode");
-
-            builder.addField("Downloads", "[[Server 1]](" + shortVidUrl + ")", false);
+            builder.addField("Downloads", "[[Server 1]](" + vidUrl + ")", false);
             builder.addField("Watch2Gether", "[Watch with friends](" + sessionLink + ")", false);
         } else {
             builder.addField("Vote required", "[Vote here](https://top.gg/bot/783720725848129566/vote) to get Downloads & Watch2Gether Sessions in the next search!", false);
