@@ -7,6 +7,7 @@ import org.discordbots.api.client.DiscordBotListAPI;
 
 import java.awt.*;
 import java.io.*;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -82,10 +83,16 @@ public class Config {
     }
 
     public static void logError(Exception e, String error) {
-        String base = e.toString() + "\n" + Arrays.stream(e.getStackTrace())
-                .map(StackTraceElement::toString)
-                .collect(Collectors.joining("\n"))
-                + "\n" + error;
+        String base;
+        if (e instanceof SocketTimeoutException) {
+            base = e + "\n" + Arrays.stream(e.getStackTrace())
+                    .map(StackTraceElement::toString)
+                    .collect(Collectors.joining("\n"))
+                    + "\n" + error;
+        } else {
+            base = "SocketTimeoutException: " + e.getMessage() + "\n" + error;
+        }
+
 
         List<String> messages = new ArrayList<>();
         messages.add(base);
