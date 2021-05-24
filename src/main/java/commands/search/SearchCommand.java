@@ -17,6 +17,7 @@ public class SearchCommand extends Command {
     public void called(String args) {
 
         boolean premium = Premium.propExist(event.getAuthor().getId());
+        premium = true;
 
         if (event.getGuild().getId().equals("783764380398518292") || premium) {
             new SearchSection(event.getTextChannel().getIdLong(), event.getAuthor().getIdLong(), args, event);
