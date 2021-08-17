@@ -1,5 +1,5 @@
 # Touka V3
-[![Support Server](https://img.shields.io/discord/591914197219016707.svg?label=Discord&logo=Discord&colorB=7289da&style=for-the-badge)](https://discord.com/invite/tvDXKZSzqd)
+[![Support Server](https://img.shields.io/discord/783764380398518292.svg?label=Discord&logo=Discord&colorB=7289da&style=for-the-badge)](https://discord.com/invite/tvDXKZSzqd)
 
 Another Touka rewrite but not cluttered
 
