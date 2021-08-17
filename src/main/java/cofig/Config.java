@@ -18,7 +18,24 @@ public class Config {
     public static final String PREFIX = ">";
     public static final Color DEFAULT_COLOR = new Color(40, 38, 38);
     public static final String VERSION = "3.1.3";
+
+    /*  Discord Bot  */
+    public static final String BOT_TOKEN = "NzgzNzIwNzI1ODQ4MTI5NTY2.X8e2zQ.nbq7lDRxEK9eNebvwY6yfV6qLGk";
+
+    /*  Error Discord Bot */
+    
+    // Bot sends exceptions for debugging purposes into the specified discord channel
+    public static final String ERROR_BOT_TOKEN = "ODQyMDk4NjMyMDQzMzk3MTgx.YJwXdw.zDah5AEkntFKcOYhJ9CED3aRadY";
+    public static final long ERROR_GUILD_ID = 783764380398518292L;
+    public static final long ERROR_CHANNEL_ID = 842100828952199228L;
+
+    /*  Discord Bot List  */
     public static final String DBL_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc4MzcyMDcyNTg0ODEyOTU2NiIsImJvdCI6dHJ1ZSwiaWF0IjoxNjEwOTU4NjM0fQ.tvBj4mWyIKOpYimt6hCvShwlUm7vX63Zz0evPszNFY8";
+    public static final String DBL_ID = "783720725848129566";
+
+    /*  Bot Owner */
+    public static final List<Long> BOT_OWNER = List.of(265849018662387712L, 414755070161453076L);
+
     public static long thisId = 0;
     private static ShardManager sm;
 
@@ -47,7 +64,7 @@ public class Config {
     public static void refreshGuildCount() {
         DiscordBotListAPI api = new DiscordBotListAPI.Builder()
                 .token(Config.DBL_TOKEN)
-                .botId("783720725848129566")
+                .botId(Config.DBL_ID)
                 .build();
 
         guildCount = sm.getShards().stream()
@@ -108,7 +125,7 @@ public class Config {
         }
 
         for (String s : messages) {
-            errorBot.getGuildById(783764380398518292L).getTextChannelById(842100828952199228L).sendMessage(s)
+            errorBot.getGuildById(ERROR_GUILD_ID).getTextChannelById(ERROR_CHANNEL_ID).sendMessage(s)
                     .queue(m -> System.out.println("sent error to channel"));
         }
     }
