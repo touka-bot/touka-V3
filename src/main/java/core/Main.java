@@ -31,7 +31,7 @@ public class Main {
     public static void main(String[] args) throws LoginException, IOException {
         Premium.init();
 
-        JDABuilder errBuilder = JDABuilder.createDefault("ODQyMDk4NjMyMDQzMzk3MTgx.YJwXdw.zDah5AEkntFKcOYhJ9CED3aRadY"); //touka error login
+        JDABuilder errBuilder = JDABuilder.createDefault(Config.ERROR_BOT_TOKEN); //touka error login
         errBuilder.disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.ROLE_TAGS, CacheFlag.MEMBER_OVERRIDES, CacheFlag.EMOTE, CacheFlag.VOICE_STATE);
         errBuilder.setDisabledIntents(GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MEMBERS);
         errBuilder.setAutoReconnect(true);
@@ -40,11 +40,7 @@ public class Main {
         Config.setErrorBot(error);
 
 
-        DefaultShardManagerBuilder builder =
-                //NzgzNzY5OTgyNjMwMzYzMTk3.X8fkrQ.LvgAphYEinHyPyQNz3mgYbPoxF0        dev
-                //NzgzNzIwNzI1ODQ4MTI5NTY2.X8e2zQ.nbq7lDRxEK9eNebvwY6yfV6qLGk        prod
-                //ODE5MjM3MTU0OTc3ODczOTMw.YEjsDg.n20cgALF7DBbrp1-0RnA3Kg_8ok        alain
-                DefaultShardManagerBuilder.createDefault("NzgzNzIwNzI1ODQ4MTI5NTY2.X8e2zQ.nbq7lDRxEK9eNebvwY6yfV6qLGk");
+        DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(Config.BOT_TOKEN);
         builder.setCompression(Compression.ZLIB);
         builder.setStatus(OnlineStatus.ONLINE);
         builder.setAutoReconnect(true);

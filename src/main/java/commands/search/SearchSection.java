@@ -26,7 +26,7 @@ public class SearchSection extends Section {
 
     private static final DiscordBotListAPI dblApi = new DiscordBotListAPI.Builder()
             .token(Config.DBL_TOKEN)
-            .botId("783720725848129566")
+            .botId(Config.DBL_ID)
             .build();
     private static final int MAX_SHOW_LINES = 10;
 
